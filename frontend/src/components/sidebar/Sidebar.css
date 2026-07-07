@@ -1,0 +1,204 @@
+.sidebar {
+  width: 230px;
+  min-width: 230px;
+  height: 100vh;
+  background-color: var(--color-sidebar);
+  color: white;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s, min-width 0.3s;
+  overflow: hidden;
+}
+
+/* ── Logo ── */
+.sidebar-logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.sidebar-logo img {
+  max-width: 110px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* ── Top ── */
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 5px;  /* reduce el padding superior */
+  min-height: 40px;
+  margin-bottom: 8px;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: hand;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.menu-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Sección "General" ── */
+.sidebar-section {
+  padding: 2px 15px 2px;  /* reduce espacio arriba */
+  font-size: 10px;
+  font-weight: bold;
+  color: #a0aec0;
+  overflow: hidden;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+/* ── Menú principal ── */
+
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 0;
+  padding: 0px 8px;  /* quita el padding-top */
+}
+
+/* ── Items del menú ── */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 7px 15px;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  color: rgba(228, 228, 228, 0.9);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: hand;
+  transition: background 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-item:hover,
+.sidebar-item:focus-visible {
+  background-color: rgba(255,255,255,0.08);
+  outline: none;
+}
+
+.sidebar-item.active {
+  background-color: var(--color-sidebar-active);
+  color: white;
+}
+
+.sidebar-item.open {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ── Submenú ── */
+.submenu {
+  background: rgba(0,0,0,0.15);
+  padding: 2px 0;
+}
+
+/* Variante con scroll: el submenú de Informes puede tener muchos ítems
+   (un tipo de informe por entrada); en vez de empujar el resto del
+   sidebar fuera de la pantalla, se limita su alto y se permite scroll
+   interno. */
+.submenu-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+}
+.submenu-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+.submenu-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 7px 4px 5px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: hand;
+  transition: background 0.10s ease;
+  white-space: nowrap;
+  width: 100%;
+  background: none;
+  border: navy;
+  text-align: left;
+  border-radius: 7px;
+}
+
+.submenu-item svg {
+  color: rgba(255,255,255,0.7);
+  flex-shrink: 0;
+}
+
+.submenu-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.submenu-item.active {
+  background: var(--color-sidebar-active);
+  color: white;
+}
+
+.submenu-arrow {
+  transition: transform 0.2s ease;
+}
+
+.submenu-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ── Colapsado ── */
+.sidebar.collapsed {
+  width: 56px;
+  min-width: 56px;
+  padding: 0;
+}
+
+.sidebar.collapsed .sidebar-top {
+  justify-content: center;
+  padding: 16px 0 12px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-logo img {
+  max-width: 32px;
+}
+
+.sidebar.collapsed .sidebar-menu {
+  padding: 4px 0;
+}
+
+.sidebar.collapsed .sidebar-item {
+  justify-content: center;
+  padding: 14px 0;
+  border-radius: 0;
+}
+
+.sidebar.collapsed .sidebar-item svg {
+  margin: 0;
+}

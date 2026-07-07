@@ -1,0 +1,152 @@
+/*
+  AjustesDispositivoModal.css
+  - Estilos de las 4 pestañas de Ajustes (Generales/Lavadora/Grupo/Bombas).
+  - Reutiliza la paleta ya establecida (azul #2563eb, rojo #ef4444) y las
+    clases .cd-tabs/.cd-tab/.cd-tab-active ya definidas en ClientsDetail.css
+    para la navegación por pestañas, en vez de crear un patrón nuevo.
+*/
+
+.ajustes-tabs {
+  padding: 0 22px;
+}
+
+.ajustes-modal-body {
+  max-height: 60vh;
+}
+
+/* Generales */
+.ajustes-generales {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ajustes-readonly-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+}
+.ajustes-readonly-row span { color: #94a3b8; }
+.ajustes-readonly-row strong { color: #1e293b; }
+
+.ajustes-edit-btn {
+  margin-top: 14px;
+  align-self: flex-start;
+}
+
+/* Listas (Lavadoras / Grupos) */
+.ajustes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ajustes-empty-text {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 0 0 6px;
+}
+
+.ajustes-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.ajustes-row-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.ajustes-row-input-wide { flex: 2; }
+
+.ajustes-row-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+}
+.ajustes-row-field input {
+  width: 80px;
+  padding: 7px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12.5px;
+}
+
+.ajustes-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: #334155;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ajustes-row-delete {
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* Bombas (tabla) */
+.ajustes-bombas-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ajustes-bombas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.ajustes-bombas-table th {
+  text-align: left;
+  font-size: 10.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 6px 8px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.ajustes-bombas-table td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.ajustes-bombas-table input,
+.ajustes-bombas-table select {
+  width: 100%;
+  min-width: 90px;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.ajustes-bombas-table input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+}
+
+.ajustes-bombas-readonly {
+  color: #64748b;
+  font-weight: 600;
+  white-space: nowrap;
+}

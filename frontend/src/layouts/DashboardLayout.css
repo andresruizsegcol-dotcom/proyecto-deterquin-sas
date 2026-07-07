@@ -1,0 +1,50 @@
+/*
+  DashboardLayout.css
+  - El layout principal usa flex para que sidebar y contenido ocupen
+    el 100% de la pantalla sin desbordarse.
+  - El scroll vive ÚNICAMENTE en .page-content (el área de contenido),
+    nunca en el body ni en el sidebar.
+*/
+
+.dashboard-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;        /* ocupa exactamente la pantalla */
+  overflow: hidden;     /* evita scroll en el contenedor raíz */
+}
+
+/* Sidebar: alto fijo, scroll interno para el menú de informes largo */
+.dashboard-layout > aside {
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dashboard-layout > aside:not(.collapsed) {
+  width: 230px;
+  min-width: 230px;
+}
+
+.dashboard-layout > aside.collapsed {
+  width: 75px;
+  min-width: 75px;
+}
+
+/* Columna derecha (header + contenido) */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;         /* evita que flex desborde horizontalmente */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Área de contenido: aquí vive el scroll de página */
+.page-content {
+  flex: 1;
+  overflow-y: auto;     /* ← scroll principal de todas las páginas */
+  overflow-x: hidden;
+  padding: 10px;
+  background: #f0f4f8;
+}

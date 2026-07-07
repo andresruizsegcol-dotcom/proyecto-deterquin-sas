@@ -1,0 +1,80 @@
+.ph-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ph-legend-chip {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+
+.ph-scroll {
+  overflow-x: auto;
+}
+
+.ph-hours-row,
+.ph-row {
+  display: flex;
+  align-items: stretch;
+  min-width: 720px;
+}
+
+.ph-row-label {
+  width: 110px;
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+}
+
+.ph-row-track {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  background: #f8fafc;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.ph-hours-row .ph-row-track {
+  background: none;
+  height: 16px;
+}
+
+.ph-hour-mark {
+  position: absolute;
+  top: 0;
+  font-size: 10px;
+  color: #94a3b8;
+  transform: translateX(-50%);
+}
+
+.ph-block {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 4px;
+}

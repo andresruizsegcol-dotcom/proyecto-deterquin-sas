@@ -1,0 +1,1049 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/*
+  ClientsDetail.css
+  - Estilos para la vista de detalle de un cliente.
+  - Estructura principal:
+    - `.cd-header`: cabecera con acciones y título sticky.
+    - `.cd-client-info-card`: tarjeta con KPIs y acciones del cliente.
+    - `.cd-devices-grid` / `.cd-device-card`: listado de dispositivos del cliente.
+  - Nota: usa fuentes externas (`Sora`, `JetBrains Mono`) — comprobar licencia y disponibilidad.
+*/
+
+.cd-container {
+  background: #f0f2f5;
+  font-family: 'Sora', sans-serif;
+  /* sin min-height: 100vh — el scroll lo maneja .page-content del layout */
+}
+
+/* ── Header ── */
+.cd-header {
+  background: #f1f3f7;
+  padding: 5px 5px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cd-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 6px;
+  color: #090b0c;
+  font-size: 13px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
+}
+
+.cd-back-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.cd-header-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: -0.2px;
+}
+
+.cd-header-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #10b981;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ── Body ── */
+.cd-body {
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 10px 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Section ── */
+.cd-section {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.cd-section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c2ccdd;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 18px;
+}
+
+.cd-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+/* ── Info Grid ── */
+.cd-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.cd-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.cd-info-icon {
+  color: #3b82f6;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.cd-info-sub {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cd-info-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cd-mono {
+  font-family: 'JetBrains Mono',
+    monospace;
+  font-size: 12px !important;
+}
+
+/* ── Add Button ── */
+.cd-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.cd-add-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.cd-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e7ff;
+  color: #3b82f6;
+  font-size: 11px;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* ── Empty state ── */
+.cd-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+}
+
+.cd-empty-icon {
+  color: #d1d5db;
+  margin-bottom: 12px;
+}
+
+.cd-empty p {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.cd-add-btn-empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eff6ff;
+  border: 1px dashed #3b82f6;
+  border-radius: 8px;
+  color: #3b82f6;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
+}
+
+.cd-add-btn-empty:hover {
+  background: #dbeafe;
+}
+
+/* ── Device Cards ── */
+.cd-devices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.cd-device-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  transition: box-shadow 0.2s, transform 0.15s;
+  animation: cdFadeIn 0.25s ease;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .cd-body {
+    padding: 10px;
+  }
+
+  .cd-client-info-card {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cd-client-info-left {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .cd-client-info-mid {
+    padding: 0;
+    border-right: none;
+  }
+
+  .cd-section {
+    padding: 14px;
+  }
+}
+
+.cd-device-card:hover {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.cd-device-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cd-device-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #e0e7ff;
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-device-status,
+.cd-product-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.cd-status-on {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.cd-status-off {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.cd-device-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.cd-device-serial {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.cd-device-tag {
+  display: inline-block;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+
+.cd-device-loc {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.cd-device-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.cd-icon-btn {
+  background: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 7px;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.cd-icon-btn:hover {
+  background: #cbd5e1;
+  color: #334155;
+}
+
+.cd-icon-del:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ── Stats Row ── */
+.cd-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.cd-stat {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.cd-stat-val {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cd-stat-label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cd-stat-green {
+  color: #10b981;
+}
+
+.cd-stat-red {
+  color: #ef4444;
+}
+
+/* ── Modal ── */
+.cd-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 100;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.cd-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: cdFadeIn 0.2s ease;
+}
+
+/* Variante ancha: para modales con tablas (Programas, Calibración remota)
+   que no entran cómodamente en los 420px pensados para formularios simples */
+.cd-modal-wide {
+  max-width: 920px;
+}
+
+.cd-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.cd-modal-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.cd-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+}
+
+.cd-modal-close:hover {
+  color: #475569;
+}
+
+.cd-modal-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.cd-modal-body label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: -6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cd-modal-body input,
+.cd-modal-body select {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: #1e293b;
+  font-family: 'Sora', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.cd-modal-body input:focus,
+.cd-modal-body select:focus {
+  border-color: #3b82f6;
+}
+
+.cd-modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 22px 20px;
+  justify-content: flex-end;
+  border-top: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.cd-btn-cancel {
+  background: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 13px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+}
+
+.cd-btn-crear {
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: background 0.15s;
+}
+
+.cd-btn-crear:hover {
+  background: #2563eb;
+}
+
+.cd-btn-crear:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* ── Not found ── */
+.cd-not-found {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+  font-family: 'Sora', sans-serif;
+}
+
+.cd-not-found button {
+  margin-top: 14px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+
+/* ── Animation ── */
+@keyframes cdFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header actions */
+.cd-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cd-header-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1f2937;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.cd-header-btn svg {
+  color: inherit;
+}
+
+.cd-header-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Client info card CM2W style */
+.cd-client-info-card {
+
+  background: #fff;
+  border-radius: 12px;
+  padding: 3px 25px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+}
+
+.cd-client-info-left {
+  flex: 2;
+  min-width: 160px;
+  padding-right: 20px;
+  border-right: 1px solid #f1f5f9;
+}
+
+.cd-client-nombre {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cd-client-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cd-client-info-mid {
+  flex: 1.5;
+  padding: 0 20px;
+  border-right: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cd-client-stat-label {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.cd-client-stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.cd-client-stat-val span {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.cd-circle-wrap {
+  width: 50px;
+  height: 50px;
+  margin-top: 6px;
+}
+
+.cd-circle-svg {
+  height: 70%;
+
+}
+
+.cd-client-info-notif {
+  flex: 2;
+  padding: 0 20px;
+  border-right: 1px solid #f1f5f9;
+}
+
+.cd-notif-ok {
+  color: #10b981;
+  font-weight: 600;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.cd-client-info-status {
+  flex: 1.5;
+  padding: 0 20px;
+  border-right: 1px solid #f1f5f9;
+}
+
+.cd-no-suscrito {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* ── Botones de acceso rápido en la tarjeta del cliente ──
+   Layout CM2W: cuadrícula 2×2
+     [   Dispositivos (count badge)   ]  ← fila 1, full-width
+     [ Productos ]  [ Informes ]         ← fila 2, dos columnas
+   Cada botón: icono arriba + etiqueta abajo, compacto sin borde. */
+.cd-client-info-btns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 6px;
+  padding-left: 16px;
+  min-width: 130px;
+  align-items: start;
+}
+
+/* Dispositivos ocupa las dos columnas */
+.cd-client-btn-full {
+  grid-column: 1 / -1;
+}
+
+.cd-client-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 5px 4px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  text-align: center;
+}
+.cd-client-btn:hover { background: #f1f5f9; }
+
+/* Icono + badge de conteo para Dispositivos */
+.cd-client-btn-icon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1px;
+  color: #2563eb;
+}
+.cd-client-btn-count {
+  font-size: 9px;
+  font-weight: 700;
+  color: #2563eb;
+  line-height: 1;
+  margin-top: -2px;
+}
+
+.cd-client-btn span {
+  font-size: 9px;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Tabs */
+.cd-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 0;
+}
+
+.cd-tab {
+  padding: 7px 5px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.cd-tab-active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
+/* Device rows CM2W style (también reutilizado por las filas de productos:
+   misma estructura visual de 3 columnas, solo cambia el contenido) */
+.cd-devices-list,
+.cd-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cd-device-row,
+.cd-product-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+
+.cd-device-row:hover,
+.cd-product-row:hover {
+  background: #f8fafc;
+}
+
+.cd-device-row-left,
+.cd-product-row-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex: 2;
+}
+
+.cd-device-blue-bar,
+.cd-product-blue-bar {
+  width: 4px;
+  min-height: 50px;
+  background: #2563eb;
+  border-radius: 2px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.cd-device-row-name,
+.cd-product-row-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.cd-device-name-link {
+  cursor: pointer;
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.cd-device-name-link:hover {
+  color: #0f172a;
+}
+
+.cd-device-row-serial,
+.cd-product-row-serial {
+  font-size: 12px;
+  color: #475569;
+  margin-top: 2px;
+}
+
+.cd-device-row-sub,
+.cd-product-row-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cd-device-row-mid,
+.cd-product-row-mid {
+  flex: 1;
+}
+
+.cd-device-row-actions,
+.cd-product-row-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cd-dev-action-btn,
+.cd-prod-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: #2563eb;
+  font-size: 10px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.cd-dev-action-btn:hover,
+.cd-prod-action-btn:hover {
+  background: #eff6ff;
+}
+
+/* Dropdown */
+.cd-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  min-width: 140px;
+  overflow: hidden;
+}
+
+.cd-dropdown-item {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cd-dropdown-item:hover {
+  background: #f8fafc;
+}
+
+.cd-dropdown-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.cd-dropdown-red {
+  color: #ef4444 !important;
+}
+
+.cd-dropdown-red .cd-dropdown-icon {
+  color: #ef4444;
+}
+
+/* Filtro inline (lista de Dispositivos / Productos dentro de un cliente) */
+.cd-inline-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.cd-inline-filter input {
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 13px;
+  flex: 1;
+  font-family: 'Sora', sans-serif;
+  color: #1e293b;
+}
+
+.cd-inline-filter svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* =========================================================================
+   ClientsOverview (Spec 5.3) — estilos añadidos en el Paso 1.
+   - .cd-actions-grid: grilla de 2 columnas para las tarjetas de acción.
+   - .cd-action-card: tarjeta con icono, título y subtítulo.
+   - .cd-client-info-btns-row: fuerza a los 3 accesos del cliente a una fila.
+   - .cd-client-btn-sm: variante más pequeña del botón de cliente.
+   No se modificaron reglas existentes para no introducir regresiones.
+   ========================================================================= */
+.cd-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 720px) {
+  .cd-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cd-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.cd-action-card:hover:not(:disabled) {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.cd-action-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cd-action-card strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cd-action-card span {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.cd-client-info-btns-row {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-left: 0 !important;
+}
+
+.cd-client-btn-sm {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  transition: background 0.15s;
+}
+
+.cd-client-btn-sm:hover {
+  background: #e0e7ff;
+}
+
+.cd-client-btn-sm span {
+  font-size: 11px;
+  color: #1e293b;
+  font-weight: 500;
+}

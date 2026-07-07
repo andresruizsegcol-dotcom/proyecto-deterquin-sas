@@ -1,0 +1,392 @@
+/*
+  DatosEnVivoModal.css
+  Dos vistas: tarjetas de lavadoras y diagrama P&ID (Ajustes esquemáticos).
+  El diagrama usa la misma estructura de la referencia CM2W:
+    - Dos tuberías horizontales (AIR / AGUA) como columna vertebral
+    - Válvulas sobre la tubería AIR
+    - Caudalímetro entre las dos tuberías
+    - Bombas sobre la tubería AGUA
+    - Depósitos de productos bajo las bombas
+*/
+
+/* ── Toolbar / toggle de vista ── */
+.dev-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dev-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dev-view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2563eb;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+/* ── Vista tarjetas (Lavadoras extractoras) ── */
+.dev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.dev-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+  background: #fff;
+}
+
+.dev-card-disabled { opacity: 0.6; background: #f8fafc; }
+.dev-disabled-label { color: #b45309; font-weight: 700; }
+
+.dev-card-title {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dev-field-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.dev-field-label { color: #94a3b8; flex-shrink: 0; }
+.dev-field-value { color: #334155; font-weight: 600; text-align: right; }
+.dev-not-running { color: #94a3b8; font-weight: 600; }
+
+/* Punto de estado */
+.dev-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.dev-dot.running  { background: #22c55e; }
+.dev-dot.idle     { background: #94a3b8; }
+.dev-dot.disabled { background: #f59e0b; }
+
+/* Barras de progreso de bombas */
+.dev-bombas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.dev-bomba-bar-wrap {
+  position: relative;
+  height: 22px;
+  border-radius: 5px;
+  background: #f1f5f9;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.dev-bomba-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+.dev-bomba-bar-fill.ok    { background: #16a34a; }
+.dev-bomba-bar-fill.error { background: #ef4444; }
+.dev-bomba-bar-fill.pend  { background: #e2e8f0; }
+
+.dev-bomba-bar-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.dev-bomba-bar-label.dark { color: #334155; }
+
+/* ── Diagrama P&ID (Ajustes esquemáticos) ── */
+
+/* Filtros */
+.dev-esquema-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.dev-esquema-filtro-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dev-esquema-filtro-item label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.dev-esquema-filtro-item select {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 5px 10px;
+  background: #fff;
+  font-family: inherit;
+  min-width: 130px;
+}
+
+.dev-esquema-estado-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #22c55e;
+  color: #fff;
+  align-self: flex-end;
+}
+
+/* ── Layout P&ID (filas + columnas) ── */
+.dev-pid-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 8px;
+}
+
+.dev-pid-diagram {
+  position: relative;
+  min-width: max-content;
+}
+
+/* Cada fila del diagrama */
+.dev-pid-row {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Etiqueta izquierda (AIR / AGUA) */
+.dev-pid-label {
+  width: 68px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+/* Cada columna del diagrama (una por lavadora) */
+.dev-pid-col {
+  width: 148px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Etiquetas AIR / AGUA */
+.dev-pid-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.dev-pid-tag.air  { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+.dev-pid-tag.agua { background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; }
+
+/* Tubería AIR horizontal — se dibuja con ::before sobre todos los cols */
+.dev-pid-air-row {
+  position: relative;
+}
+.dev-pid-air-row .dev-pid-cols-wrap {
+  display: flex;
+  position: relative;
+}
+.dev-pid-air-row .dev-pid-cols-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: linear-gradient(to right, #bfdbfe, #93c5fd);
+  transform: translateY(-50%);
+  z-index: 0;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(59,130,246,0.3);
+}
+
+/* Tubería AGUA horizontal */
+.dev-pid-agua-row {
+  position: relative;
+}
+.dev-pid-agua-row .dev-pid-cols-wrap {
+  display: flex;
+  position: relative;
+}
+.dev-pid-agua-row .dev-pid-cols-wrap::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: linear-gradient(to right, #a5f3fc, #67e8f9);
+  transform: translateY(-50%);
+  z-index: 0;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(6,182,212,0.3);
+}
+
+/* Líneas verticales (conectores) */
+.dev-pid-vline {
+  width: 4px;
+  border-radius: 2px;
+}
+.dev-pid-vline.blue { background: #3b82f6; }
+.dev-pid-vline.cyan { background: #06b6d4; }
+
+/* Wrapper del caudalímetro */
+.dev-pid-flujometro-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  border: 2px solid #93c5fd;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.2);
+}
+
+.dev-pid-flujometro-wrap img {
+  width: 44px;
+  height: 28px;
+}
+
+.dev-pid-flujo-val {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #0369a1;
+  text-align: center;
+  margin-top: 1px;
+  line-height: 1.1;
+}
+
+/* Valor de flujo bajo la bomba */
+.dev-pid-flow-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-top: 2px;
+}
+
+/* Nombre del producto bajo el depósito */
+.dev-pid-producto-label {
+  font-size: 9.5px;
+  color: #475569;
+  font-weight: 600;
+  text-align: center;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+
+/* Tarjeta mini de lavadora en el esquema */
+.dev-esquema-lav-card {
+  width: 132px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px 9px 6px;
+  font-size: 10.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.dev-esquema-lav-name {
+  font-weight: 700;
+  font-size: 11px;
+  color: #1e293b;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dev-esquema-lav-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  color: #94a3b8;
+  font-size: 9.5px;
+  margin-bottom: 2px;
+}
+.dev-esquema-lav-row strong {
+  color: #334155;
+  font-weight: 700;
+  font-size: 9.5px;
+}
+
+/* Drum visual al final de cada tarjeta */
+.dev-esquema-drum {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Imágenes de componentes en el diagrama */
+.dev-pid-img {
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.dev-pid-img.valvula  { width: 30px; height: 38px; }
+.dev-pid-img.bomba    { width: 50px; height: 54px; }
+.dev-pid-img.deposito { width: 44px; height: 50px; }
+.dev-pid-img.flecha   { width: 14px; height: 20px; }

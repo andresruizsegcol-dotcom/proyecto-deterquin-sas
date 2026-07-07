@@ -1,0 +1,116 @@
+/*
+	ui.css
+	- Estilos para los componentes reutilizables en components/ui
+	  (Button, Card, Input, Loader).
+	- Ninguna página los usa todavía; quedan listos para adoptarse a medida
+	  que se vayan migrando los estilos "sueltos" de cada página hacia aquí.
+	- Paleta alineada con el resto de la app: azul #2563eb como acento
+	  principal, rojo #ef4444 para acciones destructivas.
+*/
+
+.ui-btn {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 10px 18px;
+	border-radius: 8px;
+	border: none;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.ui-btn:disabled {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.ui-btn-primary {
+	background-color: #2563eb;
+	color: #fff;
+}
+.ui-btn-primary:hover:not(:disabled) {
+	background-color: #1d4ed8;
+}
+
+.ui-btn-secondary {
+	background-color: #fff;
+	color: #334155;
+	border: 1px solid #cbd5e1;
+}
+.ui-btn-secondary:hover:not(:disabled) {
+	background-color: #f1f5f9;
+}
+
+.ui-btn-danger {
+	background-color: #ef4444;
+	color: #fff;
+}
+.ui-btn-danger:hover:not(:disabled) {
+	background-color: #dc2626;
+}
+
+.ui-card {
+	background-color: #fff;
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.ui-input-group {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 12px;
+}
+
+.ui-input-label {
+	font-size: 13px;
+	font-weight: 500;
+	color: #334155;
+}
+
+.ui-input {
+	padding: 10px 12px;
+	border-radius: 8px;
+	border: 1px solid #cbd5e1;
+	font-size: 14px;
+	outline: none;
+}
+.ui-input:focus {
+	border-color: #2563eb;
+}
+
+.ui-input-error {
+	border-color: #ef4444;
+}
+
+.ui-input-error-text {
+	font-size: 12px;
+	color: #ef4444;
+}
+
+.ui-loader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: #64748b;
+	font-size: 13px;
+}
+
+.ui-loader-spinner {
+	width: 16px;
+	height: 16px;
+	border: 2px solid #e2e8f0;
+	border-top-color: #2563eb;
+	border-radius: 50%;
+	animation: ui-spin 0.7s linear infinite;
+}
+
+@keyframes ui-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.ui-loader-label {
+	white-space: nowrap;
+}

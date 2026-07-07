@@ -1,0 +1,177 @@
+/*
+  ProgramasDispositivoModal.css
+  - Estilos propios de la vista de Programas (tabla, badges de señal,
+    formulario de pasos de dosificación).
+  - Reutiliza la paleta ya establecida en ClientsDetail.css (azul #2563eb
+    de acento, rojo #ef4444 para borrar) en vez de introducir colores nuevos.
+*/
+
+.prog-modal-body {
+}
+
+.prog-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.prog-table-wrap {
+  overflow-x: auto;
+}
+
+.prog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.prog-table th {
+  text-align: left;
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.prog-table td {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  color: #1e293b;
+}
+
+.prog-table tr:hover td {
+  background: #f8fafc;
+}
+
+.prog-name {
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.prog-actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+.prog-icon-btn {
+  cursor: pointer;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+}
+
+.prog-badge-check {
+  color: #10b981;
+  font-size: 16px;
+}
+
+.signal-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 260px;
+}
+
+.signal-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  color: #64748b;
+  background: #e2e8f0;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.signal-badge.active {
+  background: #10b981;
+  color: #fff;
+}
+
+.signal-badge.readonly {
+  cursor: default;
+}
+
+.prog-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+
+.prog-form-grid label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.prog-form-grid input,
+.prog-form-grid select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.prog-form-full {
+  grid-column: 1 / -1;
+}
+
+.prog-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.prog-pasos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.prog-pasos-empty {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+}
+
+.prog-pasos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 12.5px;
+}
+
+.prog-pasos-table th {
+  text-align: left;
+  font-size: 11px;
+  color: #94a3b8;
+  padding: 6px 8px;
+}
+
+.prog-pasos-table td {
+  padding: 6px 8px;
+}
+
+.prog-pasos-table select,
+.prog-pasos-table input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12.5px;
+  box-sizing: border-box;
+}

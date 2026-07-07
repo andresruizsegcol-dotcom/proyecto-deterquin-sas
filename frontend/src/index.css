@@ -1,0 +1,183 @@
+/*
+  index.css
+  - Estilos globales y variables de layout principales.
+  - Añadimos variables CSS y breakpoints para soporte responsive (desktop / tablet / mobile).
+*/
+
+:root {
+  --color-bg: #F3F4F6;
+  --color-sidebar: #08204A;
+  --color-accent: #2563eb;
+  --color-sidebar-active: #6abf3f;
+  --color-header: rgb(214, 237, 237);
+  --color-danger: #ef4444;
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 90px;
+  --gap: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--color-bg);
+}
+
+.dashboard-layout {
+  display: flex;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+
+  background-color: var(--color-sidebar);
+
+  color: white;
+
+  padding: 20px 15px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  transition: 0.3s;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed);
+}
+
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 40px;
+}
+
+.sidebar-logo img {
+  width: 120px;
+  object-fit: contain;
+
+  transition: 0.3s;
+}
+
+.sidebar.collapsed .sidebar-logo img {
+  width: 45px;
+}
+
+.menu-button {
+  background: transparent;
+  border: none;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 14px 16px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+  font-size: 18px;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.sidebar-item.active {
+  background-color: var(--color-sidebar-active);
+}
+
+.sidebar.collapsed .sidebar-item {
+  justify-content: center;
+}
+
+.sidebar-section {
+  font-size: 12px;
+
+  color: rgba(255,255,255,0.7);
+
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  padding-left: 10px;
+
+  letter-spacing: 1px;
+}
+.main-content {
+  flex: 1;
+}
+
+.page-content {
+  padding: 20px;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* el scroll vive en .page-content, no en el body */
+}
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive breakpoints */
+/* Tablet */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 200px;
+    --sidebar-collapsed: 80px;
+  }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  /* Layout stacks vertically */
+  .dashboard-layout { flex-direction: column; }
+
+  /* Sidebar becomes compact and full-width on top */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 12px;
+    order: -1;
+  }
+  .sidebar.collapsed { width: 100%; }
+
+  /* Main content spacing */
+  .page-content { padding: 12px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+
+  /* Make sidebar items center when collapsed on mobile */
+  .sidebar.collapsed .sidebar-item { justify-content: flex-start; }
+}
