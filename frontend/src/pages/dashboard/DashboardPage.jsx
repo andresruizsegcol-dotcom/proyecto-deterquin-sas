@@ -18,10 +18,10 @@ import { simulateHistoricalWashEvents } from "../../services/deviceLiveSimulatio
 
 // Configuración visual por tipo de evento
 const EVENTO_CONFIG = {
-  "Programa acabado":    { color: "#22c55e", bg: "#f0fdf4", icon: MdCheckCircle, label: "Acabado" },
-  "Programa con error":  { color: "#ef4444", bg: "#fef2f2", icon: MdError,       label: "Error" },
-  "Programa cancelado":  { color: "#f59e0b", bg: "#fffbeb", icon: MdCancel,      label: "Cancelado" },
-  "Inicio manual":       { color: "#3b82f6", bg: "#eff6ff", icon: MdPlayArrow,   label: "Manual" },
+  "Programa acabado": { color: "#22c55e", bg: "#f0fdf4", icon: MdCheckCircle, label: "Acabado" },
+  "Programa con error": { color: "#ef4444", bg: "#fef2f2", icon: MdError, label: "Error" },
+  "Programa cancelado": { color: "#f59e0b", bg: "#fffbeb", icon: MdCancel, label: "Cancelado" },
+  "Inicio manual": { color: "#3b82f6", bg: "#eff6ff", icon: MdPlayArrow, label: "Manual" },
 };
 
 function getEventoConfig(origen) {
