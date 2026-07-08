@@ -39,12 +39,42 @@ function formatDuracion(segundos) {
   const s = segundos % 60;
   return `${m}min ${s}s`;
 }
+
+// ── Helpers de exportación CSV ──────────────────────────────────────────────
+// Escape correcto: NO envuelve en comillas a no ser que el valor contenga
+// caracteres conflictivos (comilla doble, coma, salto de línea o ;).
 function csvEscape(value) {
-  return `"${String(value ?? "").replace(/"/g, '""')}"`;
+  if (value === null || value === undefined) return "";
+  const str = String(value);
+  const needsQuote = /["\n\r;,]/.test(str);
+  if (!needsQuote) return str;
+  return `"${str.replace(/"/g, '""')}"`;
 }
+
+// Número "limpio" para CSV: 2 decimales con PUNTO (estándar CSV).
+function csvNumber(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "";
+  return n.toFixed(2);
+}
+
+// Fecha/hora estable para CSV: YYYY-MM-DD HH:mm
+function csvDateTime(fecha) {
+  if (!fecha) return "";
+  const d = new Date(fecha);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function downloadCSV(header, body, filename) {
-  const csv = [header, ...body].map((line) => line.map(csvEscape).join(",")).join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  // - Separador ';' para que Excel en español no se confunda con la coma decimal.
+  // - \r\n para máxima compatibilidad con Excel/Windows.
+  // - BOM \ufeff al inicio para que Excel detecte UTF-8 y respete tildes/ñ.
+  const csv = [header, ...body]
+    .map((line) => line.map(csvEscape).join(";"))
+    .join("\r\n");
+  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -296,24 +326,31 @@ function ReportsPage() {
     if (slug === "detallado") {
       header = ["Fecha fin", "Hora inicio", "Duracion", "Origen del evento", "Cliente", "Dispositivo", "Lavadora", "Programa", "Capacidad kg", "Detergente ml", "Agua L", "Precio"];
       body = filteredDetailed.map((r) => [
-        formatFecha(r.fecha), formatFecha(r.horaInicio), formatDuracion(r.duracionSegundos), r.origenEvento,
-        r.client, r.device, r.lavadora, `${r.programa} (${r.programaNumero})`, r.capacidadKg, r.detergenteMl, r.aguaL, r.precio,
+        csvDateTime(r.fecha), csvDateTime(r.horaInicio), csvNumber(r.duracionSegundos), r.origenEvento,
+        r.client, r.device, r.lavadora, `${r.programa} (${r.programaNumero})`,
+        csvNumber(r.capacidadKg), csvNumber(r.detergenteMl), csvNumber(r.aguaL), csvNumber(r.precio),
       ]);
     } else if (slug === "cantidad-total") {
       header = ["Cliente", "Dispositivo", "Serial", "Estado", "Ubicacion", "Productos", "Cantidad restante L", "Consumo diario L"];
-      body = filteredSummary.map((r) => [r.client, r.device, r.serial, r.status, `${r.country}, ${r.city}`, r.products, r.productTotal, r.avgDailyConsumption]);
+      body = filteredSummary.map((r) => [
+        r.client, r.device, r.serial, r.status, `${r.country}, ${r.city}`,
+        r.products, csvNumber(r.productTotal), csvNumber(r.avgDailyConsumption),
+      ]);
     } else if (slug === "ubicacion") {
       header = ["Cliente", "Dispositivo", "Ciudad", "Pais", "Ubicacion"];
       body = filteredUbicacion.map((r) => [r.client, r.device, r.ciudad, r.pais, r.ubicacion]);
     } else if (slug === "sin-consumo") {
       header = ["Cliente", "Producto", "Cantidad restante L"];
-      body = filteredSinConsumo.map((r) => [r.client, r.producto, r.cantidadRestante]);
+      body = filteredSinConsumo.map((r) => [r.client, r.producto, csvNumber(r.cantidadRestante)]);
     } else if (slug === "errores-activos") {
       header = ["Cliente", "Dispositivo", "Lavadora", "Bomba", "Producto", "Cantidad dosificada", "Cantidad objetivo"];
-      body = filteredErroresActivos.map((r) => [r.client, r.device, r.lavadora, r.bomba, r.producto, r.doneMl, r.totalMl]);
+      body = filteredErroresActivos.map((r) => [
+        r.client, r.device, r.lavadora, r.bomba, r.producto,
+        csvNumber(r.doneMl), csvNumber(r.totalMl),
+      ]);
     } else if (slug === "consumo") {
       header = ["Producto", "Consumo diario (L)"];
-      body = consumoAgg.map((r) => [r.label, r.value]);
+      body = consumoAgg.map((r) => [r.label, csvNumber(r.value)]);
     } else if (slug === "flujo-lavadora") {
       const { header: h, body: b } = seriesToCSV(flujoLavadoraSeries);
       header = h; body = b;
