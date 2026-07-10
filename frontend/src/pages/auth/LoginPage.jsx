@@ -6,10 +6,9 @@ import "./login.css";
 import { setRawItem } from "../../services/localMock";
 
 const users = [
-  
   { email: "admin@deterquin.com", password: "admin123", role: "admin" },
   { email: "usuario@deterquin.com", password: "usuario123", role: "user" },
-  { email: "soportetecnico@deterquin.com", password: "soporte123", role: "support",nombre:"Andres felipe ruiz" }
+  { email: "soportetecnico@deterquin.com", password: "soporte123", role: "support", nombre: "Andres felipe ruiz" }
 ];
 
 function LoginPage() {
@@ -17,20 +16,37 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // 👈 NUEVO: estado de carga
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {  // 👈 AHORA ES ASYNC
     e.preventDefault();
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-      setRawItem("loggedIn", "true");
-      setRawItem("userEmail", user.email);
-      setRawItem("userRole", user.role);
-      setRawItem("userName", user.nombre || "");
-      navigate("/");
-    } else {
-      setError("Correo o contraseña incorrectos");
-      setTimeout(() => setError(""), 2000);
+
+    if (loading) return; // Evita doble submit
+
+    setLoading(true);
+    setError("");
+
+    try {
+      // 👇 Simula delay de API real (recomendado 800-1500ms)
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        setRawItem("loggedIn", "true");
+        setRawItem("userEmail", user.email);
+        setRawItem("userRole", user.role);
+        setRawItem("userName", user.nombre || "");
+        navigate("/");
+      } else {
+        setError("Correo o contraseña incorrectos");
+        setTimeout(() => setError(""), 2500);
+      }
+    } catch (err) {
+      setError("Ocurrió un error. Intenta nuevamente.");
+    } finally {
+      setLoading(false); // 👈 Siempre se ejecuta
     }
   };
 
@@ -54,6 +70,7 @@ function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading} // 👈 Deshabilitado durante carga
             />
 
             <label>Contraseña</label>
@@ -63,28 +80,37 @@ function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading} // 👈 Deshabilitado durante carga
             />
 
-            {error && <p style={{ color: "#ff4d4d", textAlign: "center", marginTop: "10px" }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
             <div className="options">
-              <label>
+              <label className={loading ? "disabled" : ""}>
                 <input
                   type="checkbox"
                   onChange={(e) => setShowPassword(e.target.checked)}
+                  disabled={loading}
                 /> Mostrar contraseña
               </label>
-              <a href="#">¿Olvidaste tu contraseña?</a>
+              <a href="#" className={loading ? "disabled" : ""}>¿Olvidaste tu contraseña?</a>
             </div>
 
-            <button type="submit" className="btn">Iniciar sesión</button>
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="spinner"></span>
+                  <span>Ingresando...</span>
+                </>
+              ) : (
+                "Iniciar sesión"
+              )}
+            </button>
 
-            
             <p className="terms">Al iniciar sesión aceptas nuestras políticas de uso.</p>
           </form>
         </div>
       </div>
-
     </div>
   );
 }
