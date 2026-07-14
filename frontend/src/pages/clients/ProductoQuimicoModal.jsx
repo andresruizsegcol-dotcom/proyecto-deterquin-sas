@@ -7,7 +7,7 @@
 // - Al guardar, devuelve el producto modificado al componente padre, que es
 //   quien persiste el cambio en localStorage.
 import { useEffect, useMemo, useState } from "react";
-import { MdClose, MdCheck } from "react-icons/md";
+import { MdClose, MdCheck, MdDelete } from "react-icons/md";
 import "./ClientsDetail.css";   // reutiliza .cd-modal-overlay, .cd-modal, etc.
 
 const DEFAULT_FORM = {
@@ -166,8 +166,8 @@ export default function ProductoQuimicoModal({
   return (
     <div className="cd-modal-overlay" onClick={onClose}>
       <div className="cd-modal cd-modal-wide" onClick={(e) => e.stopPropagation()}>
-        <div className="cd-modal-header">
-          <h3>Producto químico</h3>
+        <div className="cd-modal-header" style={{ background: "var(--color-sidebar)", borderTopLeftRadius: "16px", borderTopRightRadius: "16px" }}>
+          <h3 style={{ color: "#fff", margin: 0 }}>Producto químico</h3>
           <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
             {onDelete && (
               <span
@@ -176,7 +176,7 @@ export default function ProductoQuimicoModal({
                 title="Borrar producto"
                 style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: 4, color: "#fff", fontSize: 12 }}
               >
-                <MdClose size={14} /> Borrar
+                <MdDelete size={14} /> Borrar
               </span>
             )}
             <span
