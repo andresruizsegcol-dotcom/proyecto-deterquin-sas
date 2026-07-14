@@ -1,0 +1,685 @@
+/*
+  ProgramasPage.css
+  Estilos para las 3 vistas de programas: ProgramasPage, ProgramaDetallePage,
+  PasoDetallePage. Reutiliza la paleta de ClientsDetail.css (azul #2563eb,
+  rojo #ef4444 para borrar).
+*/
+
+/* ───── Tabla de programas ───── */
+.prog-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.prog-table-wrap {
+  overflow-x: auto;
+}
+
+.prog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.prog-table th {
+  text-align: left;
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.prog-table td {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  color: #1e293b;
+}
+
+.prog-table tr:hover td {
+  background: #f8fafc;
+}
+
+.prog-name {
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.prog-name:hover {
+  text-decoration: underline;
+}
+
+.prog-actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+.prog-icon-btn {
+  cursor: pointer;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+}
+
+.prog-badge-check {
+  color: #10b981;
+  font-size: 16px;
+}
+
+/* ───── Signal badges ───── */
+.signal-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 500px;
+}
+
+.signal-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  color: #0f1010;
+  background: #fa4444;
+  cursor: hand;
+  user-select: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.signal-badge.active {
+  background: #10b981;
+  color: #fff;
+}
+
+.signal-badge.readonly {
+  cursor: default;
+}
+
+.signal-badge-dosis {
+  background: #f97316;
+  color: #fff;
+}
+
+.signal-badge-dosis.active {
+  background: #ea580c;
+  color: #fff;
+}
+
+/* ───── Form grid (create/edit program) ───── */
+.prog-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+
+.prog-form-grid label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.prog-form-grid input,
+.prog-form-grid select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.prog-form-full {
+  grid-column: 1 / -1;
+}
+
+.prog-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.prog-pasos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.prog-pasos-empty {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+}
+
+.prog-pasos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 12.5px;
+}
+
+.prog-pasos-table th {
+  text-align: left;
+  font-size: 11px;
+  color: #94a3b8;
+  padding: 6px 8px;
+}
+
+.prog-pasos-table td {
+  padding: 6px 8px;
+}
+
+.prog-pasos-table select,
+.prog-pasos-table input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12.5px;
+  box-sizing: border-box;
+}
+
+/* ───── ProgramaDetallePage — Device info card ───── */
+.pd-info-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.pd-info-left {
+  flex: 1;
+  min-width: 200px;
+}
+
+.pd-info-badge-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.pd-info-client-badge {
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.pd-info-serial-badge {
+  background: #f97316;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.pd-info-sub {
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.pd-info-mid {
+  display: flex;
+  align-items: center;
+}
+
+.pd-info-version-badge {
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.pd-info-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.pd-info-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.pd-info-notif {
+  font-size: 11px;
+  color: #10b981;
+}
+
+/* ───── ProgramaDetallePage — Settings grid ───── */
+.pd-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .pd-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pd-settings-left,
+.pd-settings-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pd-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.pd-field input,
+.pd-field select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.pd-field input:focus,
+.pd-field select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.pd-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.pd-checkbox-row label {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Lavadoras badges */
+.pd-lavadoras-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pd-lavadora-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #10b981;
+  color: #fff;
+}
+
+/* Auto start section */
+.pd-auto-start-section {
+  margin-top: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.pd-auto-fields {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-auto-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pd-auto-fields label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.pd-auto-fields input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+/* Price panel */
+.pd-price-panel {
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.pd-price-value {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.pd-price-value strong {
+  color: #1e293b;
+  font-size: 14px;
+}
+
+/* Dosing controls row */
+.pd-dosing-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.pd-dosing-item {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.pd-dosing-item label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.pd-dosing-item select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+/* ───── Pasos section in ProgramaDetallePage ───── */
+.pd-pasos-section {
+  margin-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+}
+
+.pd-pasos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.pd-pasos-header h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.pd-pasos-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pd-paso-total-row td {
+  background: #f8fafc;
+  border-top: 2px solid #e2e8f0;
+  font-size: 12px;
+}
+
+/* ───── PasoDetallePage ───── */
+.paso-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .paso-top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.paso-fields-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Activo On panel */
+.paso-activo-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.paso-activo-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 14px;
+}
+
+.paso-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.paso-toggle-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Toggle switch */
+.paso-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+
+.paso-toggle-track {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: #cbd5e1;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.paso-toggle.on .paso-toggle-track {
+  background: #2563eb;
+}
+
+.paso-toggle-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.paso-toggle.on .paso-toggle-thumb {
+  left: 22px;
+}
+
+/* Signal section */
+.paso-signal-section {
+  margin-top: 16px;
+}
+
+.paso-signal-section label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+/* Temperature section */
+.paso-temp-section {
+  margin-top: 16px;
+}
+
+.paso-temp-section label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.paso-badge-disabled {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Productos químicos section */
+.paso-productos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.paso-productos-header h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.paso-productos-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ───── Form rows used in modals/forms ───── */
+.prog-form-row {
+  margin-bottom: 14px;
+}
+
+.prog-form-row label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.prog-form-row input,
+.prog-form-row select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.prog-form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 14px;
+}
+
+.prog-form-grid-3 label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.prog-form-grid-3 input {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.prog-badge-disabled {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.prog-modal-body {
+  padding: 0;
+}

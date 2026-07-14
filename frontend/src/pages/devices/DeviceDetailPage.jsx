@@ -19,7 +19,6 @@ import {
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
-import ProgramasDispositivoModal from "../clients/ProgramasDispositivoModal";
 import CalibracionRemotaModal from "../clients/CalibracionRemotaModal";
 import AjustesDispositivoModal from "../clients/AjustesDispositivoModal";
 import DeviceLiveDataPanel from "../clients/DeviceLiveDataPanel";
@@ -98,8 +97,8 @@ function DeviceDetailPage() {
               <DropdownMenu
                 onClose={() => setShowOpciones(false)}
                 options={[
-                  { label: "Ajustes", icon: MdTune, action: () => setAjustesOpen(true) },
-                  { label: "Programas", icon: MdPlaylistPlay, action: () => setProgramasOpen(true) },
+                  { label: "Ajustes", icon: MdTune, action: () => { setAjustesOpen(true); setShowOpciones(false); } },
+                  { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${device.id}/programas`); setShowOpciones(false); } },
                   { label: "Borrar", icon: MdDelete, red: true, action: handleBorrarDispositivo },
                 ]}
               />
@@ -181,9 +180,6 @@ function DeviceDetailPage() {
       {/* Modales */}
       {editingDevice && (
         <DeviceFormModal device={device} onSave={handleGuardarEditDevice} onClose={() => setEditingDevice(false)} />
-      )}
-      {programasOpen && (
-        <ProgramasDispositivoModal dispositivo={device} onClose={() => setProgramasOpen(false)} />
       )}
       {calibracionOpen && (
         <CalibracionRemotaModal dispositivo={device} productos={productos} onClose={() => setCalibracionOpen(false)} />

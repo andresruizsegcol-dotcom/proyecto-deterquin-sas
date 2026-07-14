@@ -9,6 +9,9 @@ import DevicesPage from "../pages/devices/DevicesPage";
 import ClientsDetail from "../pages/clients/ClientsDetail";
 import DeviceDetailPage from "../pages/devices/DeviceDetailPage";
 import ReportsPage from "../pages/reports/Reportspage";
+import ProgramasPage from "../pages/clients/ProgramasPage";
+import ProgramaDetallePage from "../pages/clients/ProgramaDetallePage";
+import PasoDetallePage from "../pages/clients/PasoDetallePage";
 import "./DashboardLayout.css";
 
 function DashboardLayout() {
@@ -34,6 +37,9 @@ function DashboardLayout() {
 
             <Route path="/dispositivos" element={<DevicesPage />} />
             <Route path="/dispositivos/:deviceId" element={<DeviceDetailPage />} />
+            <Route path="/dispositivos/:deviceId/programas" element={<ProgramasPage />} />
+            <Route path="/dispositivos/:deviceId/programas/:programaId" element={<ProgramaDetallePage />} />
+            <Route path="/dispositivos/:deviceId/programas/:programaId/pasos/:pasoId" element={<PasoDetallePage />} />
 
             {/* Cada tipo de informe (REPORT_TYPES) navega a /informes/:tipo;
                 ReportsPage lee el parámetro para decidir qué contenido

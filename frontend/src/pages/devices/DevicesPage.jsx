@@ -18,7 +18,6 @@ import {
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
-import ProgramasDispositivoModal from "../clients/ProgramasDispositivoModal";
 import CalibracionRemotaModal from "../clients/CalibracionRemotaModal";
 import AjustesDispositivoModal from "../clients/AjustesDispositivoModal";
 import "./DevicesPage.css";
@@ -84,7 +83,7 @@ function DeviceCard({ dev, navigate, onDelete, onEdit, onOpenProgramas, onOpenCa
                   options={[
                     { label: "Ajustes",   icon: MdTune,       action: () => onOpenAjustes(dev) },
                     { label: "Editar",    icon: MdDraw,       action: () => onEdit(dev) },
-                    { label: "Programas", icon: MdPlaylistPlay, action: () => onOpenProgramas(dev) },
+                    { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${dev.id}/programas`); setShowMenu(false); } },
                     { label: "Borrar",    icon: MdDelete,     red: true, action: () => setShowConfirmDelete(true) },
                   ]}
                 />
@@ -249,9 +248,6 @@ function DevicesPage() {
 
       {editingDevice && (
         <DeviceFormModal device={editingDevice} onSave={handleGuardarEditDevice} onClose={() => setEditingDevice(null)} />
-      )}
-      {programasDispositivo && (
-        <ProgramasDispositivoModal dispositivo={programasDispositivo} onClose={() => setProgramasDispositivo(null)} />
       )}
       {calibracionDispositivo && (
         <CalibracionRemotaModal

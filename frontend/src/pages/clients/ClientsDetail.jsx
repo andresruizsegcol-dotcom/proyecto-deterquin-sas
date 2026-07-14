@@ -14,7 +14,6 @@ import {
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
-import ProgramasDispositivoModal from "./ProgramasDispositivoModal";
 import CalibracionRemotaModal from "./CalibracionRemotaModal";
 import AjustesDispositivoModal from "./AjustesDispositivoModal";
 import "./ClientsDetail.css";
@@ -375,7 +374,7 @@ function ClientsDetail() {
                           <DropdownMenu onClose={() => setDevMenuId(null)} options={[
                             { label: "Ajustes", icon: MdTune, action: () => { setAjustesDispositivo(dev); setDevMenuId(null); } },
                             { label: "Editar", icon: MdDraw, action: () => { setEditingDevice(dev); setDevMenuId(null); } },
-                            { label: "Programas", icon: MdPlaylistPlay, action: () => setProgramasDispositivo(dev) },
+                            { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${dev.id}/programas`); setDevMenuId(null); } },
                             { label: "Borrar", icon: MdDelete, red: true, action: () => handleEliminar(dev.id) },
                           ]} />
                         )}
@@ -476,7 +475,6 @@ function ClientsDetail() {
 
       {showModal && <DeviceFormModal onSave={handleCrearDevice} onClose={() => setShowModal(false)} />}
       {editingDevice && <DeviceFormModal device={editingDevice} onSave={handleGuardarEditDevice} onClose={() => setEditingDevice(null)} />}
-      {programasDispositivo && <ProgramasDispositivoModal dispositivo={programasDispositivo} onClose={() => setProgramasDispositivo(null)} />}
       {calibracionDispositivo && <CalibracionRemotaModal dispositivo={calibracionDispositivo} productos={productos} onClose={() => setCalibracionDispositivo(null)} />}
       {ajustesDispositivo && <AjustesDispositivoModal dispositivo={ajustesDispositivo} productos={productos} onSaveDevice={handleGuardarEditDevice} onClose={() => setAjustesDispositivo(null)} />}
 
