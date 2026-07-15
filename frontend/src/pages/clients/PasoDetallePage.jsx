@@ -27,6 +27,7 @@ function PasoDetallePage() {
   const [programas, setProgramas] = useState(() => getProgramsForDevice(deviceId));
   const [showOpciones, setShowOpciones] = useState(false);
   const [productoModal, setProductoModal] = useState({ open: false, producto: null });
+  const [saveStatus, setSaveStatus] = useState("idle"); // 'idle' | 'saving' | 'success'
 
   const programa = programas.find((p) => String(p.id) === String(programaId));
   const pasoIndex = programa
@@ -125,6 +126,9 @@ function PasoDetallePage() {
   };
 
   const guardar = () => {
+    if (saveStatus !== "idle") return;
+    setSaveStatus("saving");
+
     // Save the paso back into the programa's pasos array
     const updatedPasos = programa.pasos.map((p) =>
       String(p.id) === String(pasoId) ? { ...p, ...form } : p
@@ -135,6 +139,14 @@ function PasoDetallePage() {
     );
     saveProgramsForDevice(deviceId, updatedProgramas);
     setProgramas(updatedProgramas);
+
+    // Simulate loading delay for saving feedback
+    setTimeout(() => {
+      setSaveStatus("success");
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 1500);
+    }, 1000);
   };
 
   const refresh = () => {
@@ -191,8 +203,25 @@ function PasoDetallePage() {
           <button className="cd-header-btn" onClick={refresh}>
             <MdRefresh size={18} /><span>Actualizar</span>
           </button>
-          <button className="cd-header-btn" onClick={guardar}>
-            <MdCheck size={18} /><span>Guardar</span>
+          <button
+            className="cd-header-btn"
+            onClick={guardar}
+            disabled={saveStatus !== "idle"}
+          >
+            {saveStatus === "saving" ? (
+              <span className="save-btn-spinner" />
+            ) : saveStatus === "success" ? (
+              <MdCheck size={18} color="#10b981" />
+            ) : (
+              <MdCheck size={18} />
+            )}
+            <span>
+              {saveStatus === "saving"
+                ? "Guardando..."
+                : saveStatus === "success"
+                ? "Guardado!"
+                : "Guardar"}
+            </span>
           </button>
           <button
             className="cd-header-btn"

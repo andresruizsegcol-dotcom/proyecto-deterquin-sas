@@ -608,6 +608,29 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+.cd-header-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner for the save button loading effect */
+.save-btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: save-spin 0.8s linear infinite;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+@keyframes save-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Client info card CM2W style */
 .cd-client-info-card {
 

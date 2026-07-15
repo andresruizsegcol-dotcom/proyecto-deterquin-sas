@@ -5,6 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import LoginPage from "../pages/auth/LoginPage";
 import ProtectedRoute from "./ProtectedRoute";
+import ProgramasPage from "../pages/clients/ProgramasPage";
+import ProgramaDetallePage from "../pages/clients/ProgramaDetallePage";
+import PasoDetallePage from "../pages/clients/PasoDetallePage";
+
 
 function AppRoutes() {
   return (
