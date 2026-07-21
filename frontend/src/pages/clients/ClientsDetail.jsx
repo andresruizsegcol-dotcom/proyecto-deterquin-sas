@@ -15,7 +15,7 @@ import {
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
 import CalibracionRemotaModal from "./CalibracionRemotaModal";
-import AjustesDispositivoModal from "./AjustesDispositivoModal";
+
 import "./ClientsDetail.css";
 
 // ── Componente de Notas por cliente ──
@@ -109,7 +109,6 @@ function ClientsDetail() {
   const [devMenuId, setDevMenuId] = useState(null);
   const [programasDispositivo, setProgramasDispositivo] = useState(null);
   const [calibracionDispositivo, setCalibracionDispositivo] = useState(null);
-  const [ajustesDispositivo, setAjustesDispositivo] = useState(null);
 
   const [showDeviceFilter, setShowDeviceFilter] = useState(false);
   const [deviceQuery, setDeviceQuery] = useState("");
@@ -372,7 +371,7 @@ function ClientsDetail() {
                         </div>
                         {devMenuId === dev.id && (
                           <DropdownMenu onClose={() => setDevMenuId(null)} options={[
-                            { label: "Ajustes", icon: MdTune, action: () => { setAjustesDispositivo(dev); setDevMenuId(null); } },
+                            { label: "Ajustes", icon: MdTune, action: () => { navigate(`/dispositivos/${dev.id}/ajustes`); setDevMenuId(null); } },
                             { label: "Editar", icon: MdDraw, action: () => { setEditingDevice(dev); setDevMenuId(null); } },
                             { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${dev.id}/programas`); setDevMenuId(null); } },
                             { label: "Borrar", icon: MdDelete, red: true, action: () => handleEliminar(dev.id) },
@@ -476,7 +475,7 @@ function ClientsDetail() {
       {showModal && <DeviceFormModal onSave={handleCrearDevice} onClose={() => setShowModal(false)} />}
       {editingDevice && <DeviceFormModal device={editingDevice} onSave={handleGuardarEditDevice} onClose={() => setEditingDevice(null)} />}
       {calibracionDispositivo && <CalibracionRemotaModal dispositivo={calibracionDispositivo} productos={productos} onClose={() => setCalibracionDispositivo(null)} />}
-      {ajustesDispositivo && <AjustesDispositivoModal dispositivo={ajustesDispositivo} productos={productos} onSaveDevice={handleGuardarEditDevice} onClose={() => setAjustesDispositivo(null)} />}
+
 
       {showEditClienteModal && (
         <div className="cd-modal-overlay" onClick={() => setShowEditClienteModal(false)}>

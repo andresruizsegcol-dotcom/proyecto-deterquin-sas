@@ -19,10 +19,10 @@ import {
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
 import CalibracionRemotaModal from "../clients/CalibracionRemotaModal";
-import AjustesDispositivoModal from "../clients/AjustesDispositivoModal";
+
 import "./DevicesPage.css";
 
-function DeviceCard({ dev, navigate, onDelete, onEdit, onOpenProgramas, onOpenCalibracion, onOpenAjustes }) {
+function DeviceCard({ dev, navigate, onDelete, onEdit, onOpenProgramas, onOpenCalibracion }) {
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
@@ -81,7 +81,7 @@ function DeviceCard({ dev, navigate, onDelete, onEdit, onOpenProgramas, onOpenCa
                 <DropdownMenu
                   onClose={() => setShowMenu(false)}
                   options={[
-                    { label: "Ajustes",   icon: MdTune,       action: () => onOpenAjustes(dev) },
+                    { label: "Ajustes",   icon: MdTune,       action: () => { navigate(`/dispositivos/${dev.id}/ajustes`); setShowMenu(false); } },
                     { label: "Editar",    icon: MdDraw,       action: () => onEdit(dev) },
                     { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${dev.id}/programas`); setShowMenu(false); } },
                     { label: "Borrar",    icon: MdDelete,     red: true, action: () => setShowConfirmDelete(true) },
@@ -127,7 +127,7 @@ function DevicesPage() {
   const [editingDevice, setEditingDevice] = useState(null);
   const [programasDispositivo, setProgramasDispositivo] = useState(null);
   const [calibracionDispositivo, setCalibracionDispositivo] = useState(null);
-  const [ajustesDispositivo, setAjustesDispositivo] = useState(null);
+
 
   const clientes = getClients();
 
@@ -239,7 +239,6 @@ function DevicesPage() {
                 onEdit={setEditingDevice}
                 onOpenProgramas={setProgramasDispositivo}
                 onOpenCalibracion={setCalibracionDispositivo}
-                onOpenAjustes={setAjustesDispositivo}
               />
             ))
           )}
@@ -256,14 +255,7 @@ function DevicesPage() {
           onClose={() => setCalibracionDispositivo(null)}
         />
       )}
-      {ajustesDispositivo && (
-        <AjustesDispositivoModal
-          dispositivo={ajustesDispositivo}
-          productos={productosDelDispositivo(ajustesDispositivo)}
-          onSaveDevice={handleGuardarEditDevice}
-          onClose={() => setAjustesDispositivo(null)}
-        />
-      )}
+
     </div>
   );
 }

@@ -8,6 +8,7 @@ import ClientsPage from "../pages/clients/ClientsPage";
 import DevicesPage from "../pages/devices/DevicesPage";
 import ClientsDetail from "../pages/clients/ClientsDetail";
 import DeviceDetailPage from "../pages/devices/DeviceDetailPage";
+import AjustesPage from "../pages/devices/AjustesPage";
 import ReportsPage from "../pages/reports/Reportspage";
 import ProgramasPage from "../pages/clients/ProgramasPage";
 import ProgramaDetallePage from "../pages/clients/ProgramaDetallePage";
@@ -37,6 +38,7 @@ function DashboardLayout() {
 
             <Route path="/dispositivos" element={<DevicesPage />} />
             <Route path="/dispositivos/:deviceId" element={<DeviceDetailPage />} />
+            <Route path="/dispositivos/:deviceId/ajustes" element={<AjustesPage />} />
             <Route path="/dispositivos/:deviceId/programas" element={<ProgramasPage />} />
             <Route path="/dispositivos/:deviceId/programas/:programaId" element={<ProgramaDetallePage />} />
             <Route path="/dispositivos/:deviceId/programas/:programaId/pasos/:pasoId" element={<PasoDetallePage />} />

@@ -1,0 +1,449 @@
+/*
+  AjustesPage.css
+  Estilos propios de la página de ajustes del dispositivo.
+  Complementa las clases cd-* de ClientsDetail.css (ya importado globalmente).
+  Paleta: azul #2563eb, rojo #ef4444, verde #22c55e, bordes #e2e8f0,
+          texto #1e293b, fondo #f1f5f9. Tipografía Sora.
+*/
+
+/* ── Barra de info del dispositivo ──────────────────────────────────── */
+.ap-info-bar {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+}
+
+.ap-info-bar-left { flex: 2; min-width: 160px; }
+.ap-info-bar-mid  { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.ap-info-bar-notif { flex: 2; }
+
+.ap-info-nombre {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ap-info-serial {
+  font-size: 11px;
+  color: #64748b;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ap-info-sub {
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.ap-info-label {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+/* ── Cuerpo de pestañas ──────────────────────────────────────────────── */
+.ap-tab-body   { margin-top: 0; }
+.ap-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+/* ── Secciones ───────────────────────────────────────────────────────── */
+.ap-section {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+/* Sección avanzada (azul CM2W) */
+.ap-section-advanced {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.ap-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.ap-title-white { color: #fff; }
+
+.ap-section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+/* ── Badges ──────────────────────────────────────────────────────────── */
+.ap-badge {
+  display: inline-block;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ap-badge-habilitado    { background: #22c55e; color: #fff; }
+.ap-badge-deshabilitado { background: #94a3b8; color: #fff; }
+
+/* ── Campos / filas ──────────────────────────────────────────────────── */
+.ap-fields-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.ap-align-center { align-items: center; }
+
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.ap-field > label,
+.ap-field label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
+.ap-label-white {
+  color: #bfdbfe !important;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.ap-field-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ── Inputs con borde derecho naranja (estilo CM2W) ─────────────────── */
+.ap-input {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-right: 3px solid #f97316;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #1e293b;
+  font-family: 'Sora', sans-serif;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.ap-input:focus {
+  border-color: #93c5fd;
+  border-right-color: #f97316;
+}
+
+/* Variante oscura para secciones azules */
+.ap-input-dark {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  border-right-color: #f97316;
+  color: #fff;
+}
+.ap-input-dark::placeholder { color: rgba(255, 255, 255, 0.45); }
+.ap-input-dark:focus        { border-color: rgba(255, 255, 255, 0.5); border-right-color: #f97316; }
+
+/* ── Selects ─────────────────────────────────────────────────────────── */
+.ap-select {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-right: 3px solid #f97316;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #1e293b;
+  font-family: 'Sora', sans-serif;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.ap-select-dark {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  border-right-color: #f97316;
+  color: #fff;
+}
+
+.ap-select-dark option { background: #1e40af; color: #fff; }
+
+/* ── Slider ──────────────────────────────────────────────────────────── */
+.ap-slider {
+  width: 100%;
+  accent-color: #2563eb;
+  height: 4px;
+  cursor: pointer;
+  display: block;
+}
+
+.ap-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* ── Checkboxes ──────────────────────────────────────────────────────── */
+.ap-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px 24px;
+}
+
+.ap-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ap-checkbox-white { color: #dbeafe; }
+
+.ap-checkbox-label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #2563eb;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ── Pills (sub-tabs de lavadoras y grupos) ─────────────────────────── */
+.ap-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.ap-pill {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: 'Sora', sans-serif;
+}
+
+.ap-pill:hover {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+.ap-pill-active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+/* ── Tabla de bombas ─────────────────────────────────────────────────── */
+.ap-table-wrap { overflow-x: auto; }
+
+.ap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.ap-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  padding: 8px 12px;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
+  background: #f8fafc;
+}
+
+.ap-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+.ap-table-row {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ap-table-row:hover { background: #eff6ff; }
+.ap-td-link         { color: #2563eb; }
+
+/* ── Valor de solo lectura ───────────────────────────────────────────── */
+.ap-readonly-val {
+  font-size: 13px;
+  color: #1e293b;
+  padding: 6px 2px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+/* ── Sección colapsable (User log) ──────────────────────────────────── */
+.ap-collapsible-section { padding: 12px 20px; }
+
+.ap-collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.ap-collapsible-title {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.ap-show-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #2563eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  padding: 0;
+  transition: color 0.15s;
+}
+.ap-show-btn:hover { color: #1d4ed8; }
+
+.ap-userlog-body { padding-top: 12px; }
+.ap-empty-text   { font-size: 12px; color: #94a3b8; margin: 0; }
+
+/* ── Estados vacíos ──────────────────────────────────────────────────── */
+.ap-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* ── Ozone placeholder ───────────────────────────────────────────────── */
+.ap-ozone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #64748b;
+  font-size: 14px;
+  gap: 14px;
+  text-align: center;
+}
+.ap-ozone-icon { font-size: 44px; }
+
+/* ── Modal de bomba ──────────────────────────────────────────────────── */
+.ap-bomba-modal {
+  max-width: 560px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ap-bomba-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #1e40af;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ap-bomba-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ap-bomba-modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ap-bomba-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  transition: opacity 0.15s;
+}
+.ap-bomba-btn:hover { opacity: 0.88; }
+
+.ap-bomba-btn-confirm { background: #22c55e; color: #fff; }
+.ap-bomba-btn-close   { background: #ef4444; color: #fff; }
+
+.ap-bomba-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 22px;
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+}
+
+.ap-bomba-body > label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: -4px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ap-info-bar        { gap: 14px; }
+  .ap-checkbox-grid   { grid-template-columns: 1fr; }
+  .ap-fields-row      { flex-direction: column; }
+  .ap-field           { min-width: unset; }
+  .ap-pills           { gap: 6px; }
+}

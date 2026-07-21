@@ -20,7 +20,7 @@ import {
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
 import CalibracionRemotaModal from "../clients/CalibracionRemotaModal";
-import AjustesDispositivoModal from "../clients/AjustesDispositivoModal";
+
 import DeviceLiveDataPanel from "../clients/DeviceLiveDataPanel";
 import "../clients/ClientsDetail.css";
 import "./DeviceDetailPage.css";
@@ -43,7 +43,6 @@ function DeviceDetailPage() {
   const [editingDevice, setEditingDevice] = useState(false);
   const [programasOpen, setProgramasOpen] = useState(false);
   const [calibracionOpen, setCalibracionOpen] = useState(false);
-  const [ajustesOpen, setAjustesOpen] = useState(false);
 
   if (!match) {
     return (
@@ -97,7 +96,7 @@ function DeviceDetailPage() {
               <DropdownMenu
                 onClose={() => setShowOpciones(false)}
                 options={[
-                  { label: "Ajustes", icon: MdTune, action: () => { setAjustesOpen(true); setShowOpciones(false); } },
+                  { label: "Ajustes", icon: MdTune, action: () => { navigate(`/dispositivos/${device.id}/ajustes`); setShowOpciones(false); } },
                   { label: "Programas", icon: MdPlaylistPlay, action: () => { navigate(`/dispositivos/${device.id}/programas`); setShowOpciones(false); } },
                   { label: "Borrar", icon: MdDelete, red: true, action: handleBorrarDispositivo },
                 ]}
@@ -184,14 +183,7 @@ function DeviceDetailPage() {
       {calibracionOpen && (
         <CalibracionRemotaModal dispositivo={device} productos={productos} onClose={() => setCalibracionOpen(false)} />
       )}
-      {ajustesOpen && (
-        <AjustesDispositivoModal
-          dispositivo={device}
-          productos={productos}
-          onSaveDevice={handleGuardarEditDevice}
-          onClose={() => setAjustesOpen(false)}
-        />
-      )}
+
     </div>
   );
 }
