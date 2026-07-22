@@ -20,10 +20,10 @@ import "../clients/ClientsDetail.css";
 import "./AjustesPage.css";
 
 const PAGE_TABS = [
-  { key: "generales",  label: "Ajustes generales" },
-  { key: "lavadoras",  label: "Ajustes lavadora" },
-  { key: "grupos",     label: "Ajustes grupo dosificacion" },
-  { key: "bombas",     label: "Ajustes de bomba" },
+  { key: "generales", label: "Ajustes generales" },
+  { key: "lavadoras", label: "Ajustes lavadora" },
+  { key: "grupos", label: "Ajustes grupo dosificacion" },
+  { key: "bombas", label: "Ajustes de bomba" },
 ];
 
 /* ── Extiende el config raw con defaults para todos los campos nuevos ── */
@@ -184,7 +184,7 @@ function BombaModal({ bomba, grupos, productos, onConfirm, onClose }) {
 ══════════════════════════════════════════════════════════════════════ */
 function AjustesPage() {
   const { deviceId } = useParams();
-  const navigate     = useNavigate();
+  const navigate = useNavigate();
 
   const match = findDeviceById(deviceId);
   if (!match) {
@@ -200,15 +200,15 @@ function AjustesPage() {
   const productos = getProductsForClient(clienteIndex);
 
   /* ── Estado ── */
-  const [config,           setConfig]           = useState(() => extendConfig(getCalibracionConfig(device.id)));
-  const [activeTab,        setActiveTab]        = useState("generales");
-  const [activeLavIdx,     setActiveLavIdx]     = useState(0);
-  const [activeGrpIdx,     setActiveGrpIdx]     = useState(0);
-  const [showUserLog,      setShowUserLog]      = useState(false);
-  const [showUserLogBomb,  setShowUserLogBomb]  = useState(false);
-  const [selectedBomba,    setSelectedBomba]    = useState(null);
-  const [saved,            setSaved]            = useState(false);
-  const [showOpciones,     setShowOpciones]     = useState(false);
+  const [config, setConfig] = useState(() => extendConfig(getCalibracionConfig(device.id)));
+  const [activeTab, setActiveTab] = useState("generales");
+  const [activeLavIdx, setActiveLavIdx] = useState(0);
+  const [activeGrpIdx, setActiveGrpIdx] = useState(0);
+  const [showUserLog, setShowUserLog] = useState(false);
+  const [showUserLogBomb, setShowUserLogBomb] = useState(false);
+  const [selectedBomba, setSelectedBomba] = useState(null);
+  const [saved, setSaved] = useState(false);
+  const [showOpciones, setShowOpciones] = useState(false);
 
   /* ── Helpers de actualización de config ── */
   const setGen = (k, v) => setConfig(c => ({ ...c, generales: { ...c.generales, [k]: v } }));
@@ -329,7 +329,7 @@ function AjustesPage() {
     setSelectedBomba(null);
   };
 
-  const g   = config.generales;
+  const g = config.generales;
   const lav = config.lavadoras[activeLavIdx];
   const grp = config.grupos[activeGrpIdx];
 
@@ -359,8 +359,10 @@ function AjustesPage() {
             </button>
             {showOpciones && (
               <DropdownMenu onClose={() => setShowOpciones(false)} options={[
-                { label: "Ver dispositivo", icon: MdTune,
-                  action: () => { navigate(`/dispositivos/${device.id}`); setShowOpciones(false); } },
+                {
+                  label: "Ver dispositivo", icon: MdTune,
+                  action: () => { navigate(`/dispositivos/${device.id}`); setShowOpciones(false); }
+                },
               ]} />
             )}
           </div>
@@ -413,13 +415,13 @@ function AjustesPage() {
                 <div className="ap-section-title">Keyboard Ajustes (Program selector)</div>
                 <div className="ap-checkbox-grid">
                   {[
-                    ["buttonSounds",                 "Button sounds"],
-                    ["mostrarSugerencias",            "Mostrar sugerencias en teclado"],
-                    ["useButtons",                   "Use buttons"],
-                    ["stopPrograms",                 "Stop programs"],
-                    ["calibrador",                      "Calibrador"],
-                    ["cebar",                        "Cebar"],
-                    ["showErrors",                   "Show errors"],
+                    ["buttonSounds", "Button sounds"],
+                    ["mostrarSugerencias", "Mostrar sugerencias en teclado"],
+                    ["useButtons", "Use buttons"],
+                    ["stopPrograms", "Stop programs"],
+                    ["calibrador", "Calibrador"],
+                    ["cebar", "Cebar"],
+                    ["showErrors", "Show errors"],
                     ["separatedWashExtractorErrors", "Separated wash extractor errors"],
                   ].map(([k, label]) => (
                     <label key={k} className="ap-checkbox-label">
@@ -491,10 +493,10 @@ function AjustesPage() {
                 <div className="ap-section-title">Other Ajustes</div>
                 <div className="ap-checkbox-grid">
                   {[
-                    ["internalAlarm",           "Internal alarm"],
-                    ["ExternalAlarm",            "External alarm"],
-                    ["lowDetergentLevelAlarm",   "Low detergent level alarm"],
-                    ["autoSyncWashExtractors",   "Auto sync wash extractors live data"],
+                    ["internalAlarm", "Internal alarm"],
+                    ["ExternalAlarm", "External alarm"],
+                    ["lowDetergentLevelAlarm", "Low detergent level alarm"],
+                    ["autoSyncWashExtractors", "Auto sync wash extractors live data"],
                   ].map(([k, label]) => (
                     <label key={k} className="ap-checkbox-label">
                       <input type="checkbox" checked={!!g[k]}
@@ -510,10 +512,10 @@ function AjustesPage() {
                 <div className="ap-section-title">Tabs settings</div>
                 <div className="ap-checkbox-grid">
                   {[
-                    ["tabAjustesLavadora",          "Ajustes lavadora"],
-                    ["tabAjustesGrupoDosificacion",  "Ajustes grupo dosificación"],
-                    ["tabAjustesDeBomba",            "Ajustes de bomba"],
-                    ["tabOzoneSettings",             "Ozone settings"],
+                    ["tabAjustesLavadora", "Ajustes lavadora"],
+                    ["tabAjustesGrupoDosificacion", "Ajustes grupo dosificación"],
+                    ["tabAjustesDeBomba", "Ajustes de bomba"],
+                    ["tabOzoneSettings", "Ozone settings"],
                   ].map(([k, label]) => (
                     <label key={k} className="ap-checkbox-label">
                       <input type="checkbox" checked={!!g[k]}
@@ -529,9 +531,9 @@ function AjustesPage() {
                 <div className="ap-section-title ap-title-white">Advanced other settings</div>
                 <div className="ap-checkbox-grid">
                   {[
-                    ["interrumpirDosisAnterior",       "Interromper dosis del paso anterior"],
-                    ["overdosingProtection",           "Overdosing protection"],
-                    ["stopProgramOnModuleDisconnect",  "Stop program on module disconnect"],
+                    ["interrumpirDosisAnterior", "Interromper dosis del paso anterior"],
+                    ["overdosingProtection", "Overdosing protection"],
+                    ["stopProgramOnModuleDisconnect", "Stop program on module disconnect"],
                   ].map(([k, label]) => (
                     <label key={k} className="ap-checkbox-label ap-checkbox-white">
                       <input type="checkbox" checked={!!g[k]}
@@ -649,9 +651,9 @@ function AjustesPage() {
 
                         <div className="ap-fields-row" style={{ marginTop: 14 }}>
                           {[
-                            ["capacidadKg",                   "Capacidad de Lavadora kg"],
-                            ["minimumCapacityKg",             "Minimum Wash extractor capacity kg"],
-                            ["productsDeliveryWaterQuantityMl","Products delivery water quantity ml"],
+                            ["capacidadKg", "Capacidad de Lavadora kg"],
+                            ["minimumCapacityKg", "Minimum Wash extractor capacity kg"],
+                            ["productsDeliveryWaterQuantityMl", "Products delivery water quantity ml"],
                             ["productsDeliveryAirflushTimeS", "Products delivery airflush time s"],
                           ].map(([k, label]) => (
                             <div key={k} className="ap-field">
@@ -683,10 +685,10 @@ function AjustesPage() {
                         <div className="ap-section-title ap-title-white">Advanced {lav.nombre}</div>
                         <div className="ap-checkbox-grid">
                           {[
-                            ["interrumpirProgramaTrasError",                 "Interrumpir programa tras error"],
-                            ["interruptOnWaterError",                       "Interrupt on water error"],
-                            ["comenzarAutomaticamenteConCapacidadMaxima",   "Comenzar automáticamente con capacidad máxima"],
-                            ["waitInputsToStopProgram",                     "Wait inputs to stop program"],
+                            ["interrumpirProgramaTrasError", "Interrumpir programa tras error"],
+                            ["interruptOnWaterError", "Interrupt on water error"],
+                            ["comenzarAutomaticamenteConCapacidadMaxima", "Comenzar automáticamente con capacidad máxima"],
+                            ["waitInputsToStopProgram", "Wait inputs to stop program"],
                           ].map(([k, label]) => (
                             <label key={k} className="ap-checkbox-label ap-checkbox-white">
                               <input type="checkbox" checked={!!lav[k]}
@@ -846,10 +848,10 @@ function AjustesPage() {
                         <div className="ap-section-title">Water settings ({grp.nombre})</div>
                         <div className="ap-fields-row">
                           {[
-                            ["volumenAguaAntesProd",   "Volumen de agua antes del producto químico (ml)"],
-                            ["volumenAguaTrasProd",    "Volumen de agua tras producto químico (ml)"],
-                            ["cantidadAguaCalibradaMl","Cantidad de agua calibrada (ml)"],
-                            ["ticsCalibradaAgua",      "Tics de calibración agua"],
+                            ["volumenAguaAntesProd", "Volumen de agua antes del producto químico (ml)"],
+                            ["volumenAguaTrasProd", "Volumen de agua tras producto químico (ml)"],
+                            ["cantidadAguaCalibradaMl", "Cantidad de agua calibrada (ml)"],
+                            ["ticsCalibradaAgua", "Tics de calibración agua"],
                           ].map(([k, label]) => (
                             <div key={k} className="ap-field">
                               <label>{label}</label>
@@ -935,7 +937,7 @@ function AjustesPage() {
                       </thead>
                       <tbody>
                         {config.bombas.map(bomba => {
-                          const prod  = productos.find(p => String(p.id) === String(bomba.productoId));
+                          const prod = productos.find(p => String(p.id) === String(bomba.productoId));
                           const grupo = config.grupos.find(gr => String(gr.id) === String(bomba.grupoDosificacionId));
                           return (
                             <tr key={bomba.id} className="ap-table-row"
