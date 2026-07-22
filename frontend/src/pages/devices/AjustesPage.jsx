@@ -13,7 +13,7 @@ import {
 import {
   MdArrowBack, MdRefresh, MdDraw, MdMoreVert, MdClose, MdCheck,
   MdLocationOn, MdApartment, MdSignalWifi4Bar, MdSignalWifiOff,
-  MdExpandMore, MdExpandLess, MdTune,
+  MdExpandMore, MdExpandLess, MdTune, MdAdd, MdDelete,
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import "../clients/ClientsDetail.css";
@@ -24,7 +24,6 @@ const PAGE_TABS = [
   { key: "lavadoras",  label: "Ajustes lavadora" },
   { key: "grupos",     label: "Ajustes grupo dosificacion" },
   { key: "bombas",     label: "Ajustes de bomba" },
-  { key: "ozone",      label: "Ozone settings" },
 ];
 
 /* ── Extiende el config raw con defaults para todos los campos nuevos ── */
@@ -231,6 +230,93 @@ function AjustesPage() {
     bombas: c.bombas.map(b => b.id === id ? { ...b, ...patch } : b),
   }));
 
+  const addLavadora = () => {
+    const nueva = {
+      id: Date.now(),
+      nombre: `Lavadora ${config.lavadoras.length + 1}`,
+      capacidadKg: 80,
+      habilitada: true,
+      washerExtractorMode: "Standard",
+      prioridad: 50,
+      minimumCapacityKg: 0,
+      productsDeliveryWaterQuantityMl: 1500,
+      productsDeliveryAirflushTimeS: 0,
+      programaNuevoEmpezarDeteccion: "Deshabilitado",
+      turnTimeMin: 0,
+      interrumpirProgramaTrasError: false,
+      interruptOnWaterError: true,
+      comenzarAutomaticamenteConCapacidadMaxima: false,
+      waitInputsToStopProgram: true,
+      maxSignalsWithoutProgram: 0,
+    };
+    setConfig(c => ({ ...c, lavadoras: [...c.lavadoras, nueva] }));
+    setActiveLavIdx(config.lavadoras.length);
+  };
+
+  const removeLavadora = (idx) => {
+    if (!window.confirm("¿Borrar esta lavadora? También se quitará de Calibración Remota y Datos en Vivo.")) return;
+    setConfig(c => ({ ...c, lavadoras: c.lavadoras.filter((_, i) => i !== idx) }));
+    setActiveLavIdx(0);
+  };
+
+  const addGrupo = () => {
+    const nuevo = {
+      id: Date.now(),
+      nombre: `Grupo Dosificación ${config.grupos.length + 1}`,
+      habilitado: true,
+      modo: "Modo secuencial",
+      demoraAlternante: 0.5,
+      caudalimetro: "Caudalímetro 2500 pls",
+      caudalimetroModo: "Single Caudalímetro",
+      habilitarAirFlush: false,
+      levelMonitoring: "Deshabilitado",
+      reportLowLoadErrorEveryS: 0,
+      alcanzarFlujoPorPeriodo: 40,
+      pumpSwitchOnDelayS: 0,
+      volumenAguaAntesProd: 0,
+      volumenAguaTrasProd: 0,
+      cantidadAguaCalibradaMl: 0,
+      ticsCalibradaAgua: 0,
+      alarmaAguaFlujoBajo: 0,
+      alarmaAguaFlujoAlto: 10000,
+      waterCompensationMode: "OFF",
+    };
+    setConfig(c => ({ ...c, grupos: [...c.grupos, nuevo] }));
+    setActiveGrpIdx(config.grupos.length);
+  };
+
+  const removeGrupo = (idx) => {
+    if (!window.confirm("¿Borrar este grupo de dosificación?")) return;
+    setConfig(c => ({ ...c, grupos: c.grupos.filter((_, i) => i !== idx) }));
+    setActiveGrpIdx(0);
+  };
+
+  const addBomba = () => {
+    if (productos.length === 0) return;
+    const nueva = {
+      id: Date.now(),
+      nombre: `Bomba ${config.bombas.length + 1}`,
+      productoId: productos[0].id,
+      grupoDosificacionId: config.grupos[0]?.id ?? null,
+      disablePumpDosing: false,
+      stopPumpOnLowDetergentLevel: false,
+      desactivarCaudalimetro: false,
+      cantidadACalibrarMl: 1200,
+      flujoBajoAlarmaMlMin: 100,
+      flujoAltoAlarmaMlMin: 2000,
+      calibrationCorrectionPct: 0,
+      ticsRegistradosCaudalimetro: 3221,
+      flujo: 0,
+      activa: true,
+    };
+    setConfig(c => ({ ...c, bombas: [...c.bombas, nueva] }));
+  };
+
+  const removeBomba = (id) => {
+    if (!window.confirm("¿Borrar esta bomba?")) return;
+    setConfig(c => ({ ...c, bombas: c.bombas.filter(b => b.id !== id) }));
+  };
+
   /* ── Guardar (sólo aquí se persiste en localStorage) ── */
   const handleSave = () => {
     saveCalibracionConfig(device.id, config);
@@ -331,7 +417,7 @@ function AjustesPage() {
                     ["mostrarSugerencias",            "Mostrar sugerencias en teclado"],
                     ["useButtons",                   "Use buttons"],
                     ["stopPrograms",                 "Stop programs"],
-                    ["caliber",                      "Caliber"],
+                    ["calibrador",                      "Calibrador"],
                     ["cebar",                        "Cebar"],
                     ["showErrors",                   "Show errors"],
                     ["separatedWashExtractorErrors", "Separated wash extractor errors"],
@@ -406,7 +492,7 @@ function AjustesPage() {
                 <div className="ap-checkbox-grid">
                   {[
                     ["internalAlarm",           "Internal alarm"],
-                    ["marinaExterna",            "Marina externa"],
+                    ["ExternalAlarm",            "External alarm"],
                     ["lowDetergentLevelAlarm",   "Low detergent level alarm"],
                     ["autoSyncWashExtractors",   "Auto sync wash extractors live data"],
                   ].map(([k, label]) => (
@@ -488,7 +574,12 @@ function AjustesPage() {
           {activeTab === "lavadoras" && (
             <div className="ap-tab-content">
               {config.lavadoras.length === 0 ? (
-                <div className="ap-empty">No hay lavadoras configuradas para este dispositivo.</div>
+                <div className="ap-empty">
+                  <p>No hay lavadoras configuradas para este dispositivo.</p>
+                  <button className="ap-pill ap-pill-add" onClick={addLavadora} style={{ marginTop: 10 }}>
+                    + Añadir lavadora
+                  </button>
+                </div>
               ) : (
                 <>
                   {/* Pills de lavadoras */}
@@ -500,17 +591,25 @@ function AjustesPage() {
                         {l.nombre}
                       </button>
                     ))}
+                    <button className="ap-pill ap-pill-add" onClick={addLavadora} style={{ borderStyle: "dashed" }}>
+                      + Añadir lavadora
+                    </button>
                   </div>
 
                   {lav && (
                     <>
                       {/* Sección principal lavadora */}
                       <div className="ap-section">
-                        <div className="ap-section-title-row">
-                          <span className="ap-section-title" style={{ marginBottom: 0 }}>{lav.nombre}</span>
-                          <span className={`ap-badge ${lav.habilitada !== false ? "ap-badge-habilitado" : "ap-badge-deshabilitado"}`}>
-                            {lav.habilitada !== false ? "Habilitado" : "Deshabilitado"}
-                          </span>
+                        <div className="ap-section-title-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span className="ap-section-title" style={{ marginBottom: 0 }}>{lav.nombre}</span>
+                            <span className={`ap-badge ${lav.habilitada !== false ? "ap-badge-habilitado" : "ap-badge-deshabilitado"}`}>
+                              {lav.habilitada !== false ? "Habilitado" : "Deshabilitado"}
+                            </span>
+                          </div>
+                          <button onClick={() => removeLavadora(activeLavIdx)} style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: "6px", padding: "6px 12px", fontSize: "11px", fontWeight: "600", cursor: "pointer", fontFamily: "Sora" }}>
+                            Eliminar lavadora
+                          </button>
                         </div>
 
                         {/* Estado toggle */}
@@ -614,7 +713,12 @@ function AjustesPage() {
           {activeTab === "grupos" && (
             <div className="ap-tab-content">
               {config.grupos.length === 0 ? (
-                <div className="ap-empty">No hay grupos de dosificación configurados.</div>
+                <div className="ap-empty">
+                  <p>No hay grupos de dosificación configurados.</p>
+                  <button className="ap-pill ap-pill-add" onClick={addGrupo} style={{ marginTop: 10 }}>
+                    + Añadir grupo
+                  </button>
+                </div>
               ) : (
                 <>
                   {/* Pills de grupos */}
@@ -626,19 +730,27 @@ function AjustesPage() {
                         {gr.nombre}
                       </button>
                     ))}
+                    <button className="ap-pill ap-pill-add" onClick={addGrupo} style={{ borderStyle: "dashed" }}>
+                      + Añadir grupo
+                    </button>
                   </div>
 
                   {grp && (
                     <>
                       {/* Ajustes generales del grupo */}
                       <div className="ap-section">
-                        <div className="ap-section-title-row">
-                          <span className="ap-section-title" style={{ marginBottom: 0 }}>
-                            Ajustes generales ({grp.nombre})
-                          </span>
-                          <span className={`ap-badge ${grp.habilitado !== false ? "ap-badge-habilitado" : "ap-badge-deshabilitado"}`}>
-                            {grp.habilitado !== false ? "Habilitado" : "Deshabilitado"}
-                          </span>
+                        <div className="ap-section-title-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span className="ap-section-title" style={{ marginBottom: 0 }}>
+                              Ajustes generales ({grp.nombre})
+                            </span>
+                            <span className={`ap-badge ${grp.habilitado !== false ? "ap-badge-habilitado" : "ap-badge-deshabilitado"}`}>
+                              {grp.habilitado !== false ? "Habilitado" : "Deshabilitado"}
+                            </span>
+                          </div>
+                          <button onClick={() => removeGrupo(activeGrpIdx)} style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: "6px", padding: "6px 12px", fontSize: "11px", fontWeight: "600", cursor: "pointer", fontFamily: "Sora" }}>
+                            Eliminar grupo
+                          </button>
                         </div>
 
                         <div className="ap-fields-row">
@@ -818,6 +930,7 @@ function AjustesPage() {
                           <th>Flujo alto alarma</th>
                           <th>Flujo</th>
                           <th>Disable pump dosing</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -839,12 +952,22 @@ function AjustesPage() {
                                 <input type="checkbox" checked={!!bomba.disablePumpDosing}
                                   onChange={e => updateBomba(bomba.id, { disablePumpDosing: e.target.checked })} />
                               </td>
+                              <td onClick={e => e.stopPropagation()}>
+                                <button onClick={() => removeBomba(bomba.id)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: "4px" }} title="Borrar bomba">
+                                  <MdDelete size={16} color="#ef4444" />
+                                </button>
+                              </td>
                             </tr>
                           );
                         })}
                       </tbody>
                     </table>
                   </div>
+                )}
+                {productos.length > 0 && (
+                  <button className="cd-add-btn" onClick={addBomba} style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 5, background: "#eff6ff", border: "1px dashed #3b82f6", borderRadius: "8px", color: "#3b82f6", fontSize: "12px", fontWeight: "600", padding: "8px 16px", cursor: "pointer", fontFamily: "Sora" }}>
+                    <MdAdd size={15} /> Añadir bomba
+                  </button>
                 )}
               </div>
 

@@ -48,13 +48,6 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
   const [pendingQuantity, setPendingQuantity] = useState(null); // { bombaId } | null
   const [cantidadInput, setCantidadInput] = useState("");
 
-  const [showNuevoGrupo, setShowNuevoGrupo] = useState(false);
-  const [showNuevaLavadora, setShowNuevaLavadora] = useState(false);
-  const [showNuevaBomba, setShowNuevaBomba] = useState(false);
-  const [nuevoNombre, setNuevoNombre] = useState("");
-  const [nuevaBombaProductoId, setNuevaBombaProductoId] = useState(productos[0]?.id ?? "");
-  const [nuevaBombaObjetivo, setNuevaBombaObjetivo] = useState("");
-
   // Timer: cada segundo descuenta `remaining`; al llegar a 0 se decide qué
   // sigue según la acción ejecutada (Calibrar pide cantidad, las demás
   // simplemente vuelven a quedar listas).
@@ -85,46 +78,6 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
   const handleSeleccionar = () => {
     if (!grupoId || !lavadoraId) return;
     setSeleccionado(true);
-  };
-
-  const agregarGrupo = () => {
-    const nombre = nuevoNombre.trim();
-    if (!nombre) return;
-    const nuevo = { id: Date.now(), nombre };
-    const next = { ...config, grupos: [...config.grupos, nuevo] };
-    persist(next);
-    setGrupoId(nuevo.id);
-    setNuevoNombre("");
-    setShowNuevoGrupo(false);
-  };
-
-  const agregarLavadora = () => {
-    const nombre = nuevoNombre.trim();
-    if (!nombre) return;
-    const nueva = { id: Date.now(), nombre };
-    const next = { ...config, lavadoras: [...config.lavadoras, nueva] };
-    persist(next);
-    setLavadoraId(nueva.id);
-    setNuevoNombre("");
-    setShowNuevaLavadora(false);
-  };
-
-  const agregarBomba = () => {
-    if (!nuevaBombaProductoId) return;
-    const nombre = (nuevoNombre.trim() || `Bomba ${config.bombas.length + 1}`);
-    const nueva = {
-      id: Date.now(),
-      nombre,
-      productoId: nuevaBombaProductoId,
-      cantidadCalibrada: 0,
-      objetivoMl: nuevaBombaObjetivo === "" ? null : Number(nuevaBombaObjetivo),
-    };
-    const next = { ...config, bombas: [...config.bombas, nueva] };
-    persist(next);
-    setBombaId(nueva.id);
-    setNuevoNombre("");
-    setNuevaBombaObjetivo("");
-    setShowNuevaBomba(false);
   };
 
   const handleExecute = () => {
@@ -179,30 +132,12 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
                   <select value={grupoId ?? ""} onChange={(e) => { setGrupoId(Number(e.target.value)); setSeleccionado(false); }}>
                     {gruposHabilitados.map((g) => <option key={g.id} value={g.id}>{g.nombre}</option>)}
                   </select>
-                  {!showNuevoGrupo ? (
-                    <span className="calib-add-link" onClick={() => { setShowNuevoGrupo(true); setNuevoNombre(""); }}>+ Nuevo grupo</span>
-                  ) : (
-                    <div className="calib-inline-add">
-                      <input value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} placeholder="Nombre del grupo" />
-                      <button onClick={agregarGrupo}>Agregar</button>
-                      <button className="calib-inline-cancel" onClick={() => setShowNuevoGrupo(false)}>Cancelar</button>
-                    </div>
-                  )}
                 </div>
                 <div className="calib-field">
                   <label>Lavadora</label>
                   <select value={lavadoraId ?? ""} onChange={(e) => { setLavadoraId(Number(e.target.value)); setSeleccionado(false); }}>
                     {lavadorasHabilitadas.map((l) => <option key={l.id} value={l.id}>{l.nombre}</option>)}
                   </select>
-                  {!showNuevaLavadora ? (
-                    <span className="calib-add-link" onClick={() => { setShowNuevaLavadora(true); setNuevoNombre(""); }}>+ Nueva lavadora</span>
-                  ) : (
-                    <div className="calib-inline-add">
-                      <input value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} placeholder="Nombre de la lavadora" />
-                      <button onClick={agregarLavadora}>Agregar</button>
-                      <button className="calib-inline-cancel" onClick={() => setShowNuevaLavadora(false)}>Cancelar</button>
-                    </div>
-                  )}
                 </div>
               </div>
               <button className="cd-btn-crear calib-full-btn" onClick={handleSeleccionar} disabled={!grupoId || !lavadoraId}>
@@ -218,23 +153,7 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
               {bombasActivas.length === 0 ? (
                 <div className="calib-empty-inline">
                   <p>No hay bombas configuradas para este dispositivo.</p>
-                  {productos.length === 0 ? (
-                    <p className="calib-warning">Registra al menos un producto químico para este cliente antes de configurar bombas.</p>
-                  ) : !showNuevaBomba ? (
-                    <span className="calib-add-link" onClick={() => { setShowNuevaBomba(true); setNuevoNombre(""); setNuevaBombaProductoId(productos[0]?.id ?? ""); setNuevaBombaObjetivo(""); }}>
-                      + Configurar primera bomba
-                    </span>
-                  ) : (
-                    <div className="calib-inline-add calib-inline-add-bomba">
-                      <input value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} placeholder="Ej: Bomba 1" />
-                      <select value={nuevaBombaProductoId} onChange={(e) => setNuevaBombaProductoId(e.target.value)}>
-                        {productos.map((p) => <option key={p.id} value={p.id}>{p.nombre}</option>)}
-                      </select>
-                      <input type="number" step="0.1" min="0" value={nuevaBombaObjetivo} onChange={(e) => setNuevaBombaObjetivo(e.target.value)} placeholder="Objetivo ml (opcional)" />
-                      <button onClick={agregarBomba}>Agregar</button>
-                      <button className="calib-inline-cancel" onClick={() => setShowNuevaBomba(false)}>Cancelar</button>
-                    </div>
-                  )}
+                  <p className="calib-warning">Puedes configurarlas desde la página de Ajustes del dispositivo.</p>
                 </div>
               ) : (
                 <>
@@ -244,23 +163,6 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
                       <select value={bombaId ?? ""} onChange={(e) => setBombaId(Number(e.target.value))}>
                         {bombasActivas.map((b) => <option key={b.id} value={b.id}>{bombaLabel(b, productos)}</option>)}
                       </select>
-                      {productos.length > 0 && (
-                        !showNuevaBomba ? (
-                          <span className="calib-add-link" onClick={() => { setShowNuevaBomba(true); setNuevoNombre(""); setNuevaBombaProductoId(productos[0]?.id ?? ""); setNuevaBombaObjetivo(""); }}>
-                            + Nueva bomba
-                          </span>
-                        ) : (
-                          <div className="calib-inline-add calib-inline-add-bomba">
-                            <input value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} placeholder="Ej: Bomba 2" />
-                            <select value={nuevaBombaProductoId} onChange={(e) => setNuevaBombaProductoId(e.target.value)}>
-                              {productos.map((p) => <option key={p.id} value={p.id}>{p.nombre}</option>)}
-                            </select>
-                            <input type="number" step="0.1" min="0" value={nuevaBombaObjetivo} onChange={(e) => setNuevaBombaObjetivo(e.target.value)} placeholder="Objetivo ml (opcional)" />
-                            <button onClick={agregarBomba}>Agregar</button>
-                            <button className="calib-inline-cancel" onClick={() => setShowNuevaBomba(false)}>Cancelar</button>
-                          </div>
-                        )
-                      )}
                     </div>
                     <div className="calib-field">
                       <label>Acción</label>

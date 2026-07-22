@@ -8,7 +8,7 @@ import {
   MdAdd, MdRefresh, MdMoreVert, MdDraw, MdDelete,
   MdArrowBack, MdCheck, MdClose,
 } from "react-icons/md";
-import { findDeviceById, getProgramsForDevice, saveProgramsForDevice } from "../../services/localMock";
+import { findDeviceById, getProgramsForDevice, saveProgramsForDevice, getCalibracionConfig } from "../../services/localMock";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import "./ClientsDetail.css";
 import "./ProgramasPage.css";
@@ -83,6 +83,8 @@ function ProgramasPage() {
   }
 
   const { device } = match;
+  const calibracionConfig = getCalibracionConfig(deviceId);
+  const lavadorasList = (calibracionConfig?.lavadoras || []).filter(l => l.habilitada !== false);
 
   const persist = (actualizados) => {
     setProgramas(actualizados);
@@ -392,7 +394,33 @@ function ProgramasPage() {
               </div>
               <div className="prog-form-full">
                 <label>Lavadoras asociadas</label>
-                <input name="lavadoras" value={form.lavadoras} onChange={handleChange} placeholder="Ej: UNIMAC 90Kg - 1, UNIMAC 90Kg - 2" />
+                {lavadorasList.length === 0 ? (
+                  <p style={{ fontSize: "12px", color: "#ef4444", margin: "4px 0 0 0" }}>
+                    No hay lavadoras habilitadas para este dispositivo. Agrégalas en Ajustes del Dispositivo.
+                  </p>
+                ) : (
+                  <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginTop: "6px" }}>
+                    {lavadorasList.map((lav) => {
+                      const selectedLavs = form.lavadoras ? form.lavadoras.split(",").map(s => s.trim()).filter(Boolean) : [];
+                      const isChecked = selectedLavs.includes(lav.nombre);
+                      const handleCheckboxChange = (e) => {
+                        let nextSelected;
+                        if (e.target.checked) {
+                          nextSelected = [...selectedLavs, lav.nombre];
+                        } else {
+                          nextSelected = selectedLavs.filter(name => name !== lav.nombre);
+                        }
+                        setForm(f => ({ ...f, lavadoras: nextSelected.join(", ") }));
+                      };
+                      return (
+                        <label key={lav.id} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", cursor: "pointer", color: "#1e293b", textTransform: "none", fontWeight: "normal" }}>
+                          <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} style={{ cursor: "pointer" }} />
+                          {lav.nombre}
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
               <div className="prog-checkbox-row">
                 <input type="checkbox" name="inicioManual" checked={form.inicioManual} onChange={handleChange} id="pg-inicioManual" />
