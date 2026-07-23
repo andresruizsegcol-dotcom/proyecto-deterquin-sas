@@ -62,7 +62,7 @@ export function simulateLavadoraState(lavadora, programas, bombas, productos) {
 
   const bombasActivas = bombas.filter((b) => b.activa !== false);
   const bombasEstado = bombasActivas.map((bomba) => {
-    const producto = productos.find((p) => p.id === bomba.productoId);
+    const producto = productos.find((p) => String(p.id) === String(bomba.productoId));
     const totalMl = bomba.objetivoMl || Math.floor(Math.random() * 400) + 100;
     const r = Math.random();
     const estado = r < 0.08 ? "error" : r < 0.55 ? "completado" : "pendiente";

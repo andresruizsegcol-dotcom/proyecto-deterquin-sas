@@ -110,7 +110,8 @@ function DiagramaEsquematico({ lavadoras, bombas, productos, grupoNombre }) {
   const bottomItems = bombas.length > 0
     ? bombas.map((bomba, i) => ({
         key: `bomba-${bomba.id}`,
-        producto: productos.find((p) => p.id === bomba.productoId) ?? null,
+        // productoId puede ser número o string (viene de e.target.value en el select)
+        producto: productos.find((p) => String(p.id) === String(bomba.productoId)) ?? null,
         flujo: bomba.objetivoMl ?? Math.round(800 + i * 200),
       }))
     : productos.map((producto, i) => ({

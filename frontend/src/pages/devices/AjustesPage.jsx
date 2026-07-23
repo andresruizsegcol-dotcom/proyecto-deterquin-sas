@@ -67,14 +67,21 @@ function extendConfig(raw) {
       waterCompensationMode: "OFF",
       ...g,
     })),
-    bombas: (raw.bombas || []).map(b => ({
-      grupoDosificacionId: (raw.grupos || [])[0]?.id ?? null,
-      disablePumpDosing: false, stopPumpOnLowDetergentLevel: false,
-      desactivarCaudalimetro: false, cantidadACalibrarMl: 1200,
-      flujoBajoAlarmaMlMin: 100, flujoAltoAlarmaMlMin: 2000,
-      calibrationCorrectionPct: 0, ticsRegistradosCaudalimetro: 3221, flujo: 0,
-      ...b,
-    })),
+    bombas: (raw.bombas || []).map(b => {
+      const merged = {
+        grupoDosificacionId: (raw.grupos || [])[0]?.id ?? null,
+        disablePumpDosing: false, stopPumpOnLowDetergentLevel: false,
+        desactivarCaudalimetro: false, cantidadACalibrarMl: 1200,
+        flujoBajoAlarmaMlMin: 100, flujoAltoAlarmaMlMin: 2000,
+        calibrationCorrectionPct: 0, ticsRegistradosCaudalimetro: 3221, flujo: 0,
+        ...b,
+      };
+      // Normalizar a número para que los find() funcionen sin importar cómo
+      // fue guardado (los <select> de HTML siempre devuelven strings).
+      if (merged.productoId != null)          merged.productoId          = Number(merged.productoId);
+      if (merged.grupoDosificacionId != null) merged.grupoDosificacionId = Number(merged.grupoDosificacionId);
+      return merged;
+    }),
   };
 }
 
@@ -86,6 +93,17 @@ function BombaModal({ bomba, grupos, productos, onConfirm, onClose }) {
   const prod = productos.find(p => String(p.id) === String(draft.productoId));
   const set = (k, v) => setDraft(prev => ({ ...prev, [k]: v }));
 
+  // Normaliza los ids a número antes de confirmar para que coincidan
+  // con el tipo original (Date.now() = number) y los find() funcionen
+  // correctamente en todos los paneles (Datos en Vivo, Esquema, Calibración).
+  const handleConfirm = () => {
+    onConfirm({
+      ...draft,
+      productoId:          draft.productoId != null ? Number(draft.productoId) : null,
+      grupoDosificacionId: draft.grupoDosificacionId != null ? Number(draft.grupoDosificacionId) : null,
+    });
+  };
+
   return (
     <div className="cd-modal-overlay" onClick={onClose}>
       <div className="cd-modal ap-bomba-modal" onClick={e => e.stopPropagation()}>
@@ -94,7 +112,7 @@ function BombaModal({ bomba, grupos, productos, onConfirm, onClose }) {
         <div className="ap-bomba-modal-header">
           <span className="ap-bomba-modal-title">Ajustes de bomba</span>
           <div className="ap-bomba-modal-actions">
-            <button className="ap-bomba-btn ap-bomba-btn-confirm" onClick={() => onConfirm(draft)}>
+            <button className="ap-bomba-btn ap-bomba-btn-confirm" onClick={handleConfirm}>
               <MdCheck size={15} /> Confirmar
             </button>
             <button className="ap-bomba-btn ap-bomba-btn-close" onClick={onClose}>
@@ -296,8 +314,8 @@ function AjustesPage() {
     const nueva = {
       id: Date.now(),
       nombre: `Bomba ${config.bombas.length + 1}`,
-      productoId: productos[0].id,
-      grupoDosificacionId: config.grupos[0]?.id ?? null,
+      productoId: productos[0].id,           // número (Date.now)
+      grupoDosificacionId: config.grupos[0]?.id ?? null, // número
       disablePumpDosing: false,
       stopPumpOnLowDetergentLevel: false,
       desactivarCaudalimetro: false,
@@ -309,12 +327,22 @@ function AjustesPage() {
       flujo: 0,
       activa: true,
     };
-    setConfig(c => ({ ...c, bombas: [...c.bombas, nueva] }));
+    setConfig(c => {
+      const next = { ...c, bombas: [...c.bombas, nueva] };
+      saveCalibracionConfig(device.id, next);
+      return next;
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   const removeBomba = (id) => {
     if (!window.confirm("¿Borrar esta bomba?")) return;
-    setConfig(c => ({ ...c, bombas: c.bombas.filter(b => b.id !== id) }));
+    setConfig(c => {
+      const next = { ...c, bombas: c.bombas.filter(b => b.id !== id) };
+      saveCalibracionConfig(device.id, next);
+      return next;
+    });
   };
 
   /* ── Guardar (sólo aquí se persiste en localStorage) ── */
@@ -325,8 +353,20 @@ function AjustesPage() {
   };
 
   const handleConfirmBomba = (updated) => {
-    updateBomba(updated.id, updated);
+    // Actualiza el estado React y persiste de inmediato en localStorage.
+    // Así el producto asignado a la bomba se guarda aunque el usuario
+    // no presione el botón global "Guardar" del header.
+    setConfig(c => {
+      const next = {
+        ...c,
+        bombas: c.bombas.map(b => b.id === updated.id ? { ...b, ...updated } : b),
+      };
+      saveCalibracionConfig(device.id, next);
+      return next;
+    });
     setSelectedBomba(null);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
   };
 
   const g = config.generales;
