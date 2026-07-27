@@ -70,8 +70,8 @@
 
 /* Sección avanzada (azul CM2W) */
 .ap-section-advanced {
-  background: #1e40af;
-  border-color: #1e40af;
+  background: #293869;
+  border-color: #293869;
 }
 
 .ap-section-title {
@@ -202,7 +202,7 @@
 /* ── Slider ──────────────────────────────────────────────────────────── */
 .ap-slider {
   width: 100%;
-  accent-color: #2563eb;
+  accent-color: #23407d;
   height: 4px;
   cursor: pointer;
   display: block;
@@ -271,7 +271,7 @@
 }
 
 .ap-pill-active {
-  background: #2563eb;
+  background: #29447d;
   color: #fff;
   border-color: #2563eb;
 }
@@ -386,7 +386,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px;
-  background: #1e40af;
+  background: #21305f;
   flex-shrink: 0;
   flex-wrap: wrap;
   gap: 10px;
