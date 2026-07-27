@@ -13,7 +13,7 @@ import flujometroPng from "../../assets/flujometro.png";
 import depositoPng   from "../../assets/deposito-de-agua.png";
 import valvulaPng    from "../../assets/valvula.png";
 import flechaPng     from "../../assets/flecha-hacia-arriba.png";
-import "./DatosEnVivoModal.css";
+import "./DeviceLiveDataPanel.css";
 
 function formatDuration(seconds) {
   const m = Math.floor(seconds / 60);
@@ -59,6 +59,14 @@ function EsquemaLavCard({ lav }) {
   const borderColor = lav.disabled ? "#f59e0b" : lav.running ? "#22c55e" : "#94a3b8";
   return (
     <div className="dev-esquema-lav-card" style={{ borderColor }}>
+      <div className="dev-esquema-lav-indicators">
+        <div className={`dev-esquema-lav-indicator-dot blue${lav.running ? " blink" : ""}`} />
+        {lav.running ? (
+          <div className="dev-esquema-lav-indicator-dot green" />
+        ) : (
+          <div className="dev-esquema-lav-indicator-dot red" />
+        )}
+      </div>
       <div className="dev-esquema-lav-name" style={{ borderBottom: `2px solid ${borderColor}`, paddingBottom: 3 }}>
         {lav.nombre}
       </div>
@@ -212,8 +220,14 @@ function DiagramaEsquematico({ lavadoras, bombas, productos, grupoNombre }) {
                 const item = bottomItems[i];
                 return (
                   <div key={i} className="dev-pid-col" style={{ height: 64, justifyContent: "center" }}>
-                    {item ? <img src={bombaPng} className="dev-pid-img bomba" alt="bomba" />
-                          : <div className="dev-pid-vline cyan" style={{ height: 40 }} />}
+                    {item ? (
+                      <div style={{ position: "relative" }}>
+                        <img src={bombaPng} className="dev-pid-img bomba" alt="bomba" />
+                        <span className="dev-bomba-active-dot" title="Bomba Activa" />
+                      </div>
+                    ) : (
+                      <div className="dev-pid-vline cyan" style={{ height: 40 }} />
+                    )}
                   </div>
                 );
               })}
@@ -271,9 +285,14 @@ function DeviceLiveDataPanel({ dispositivo, productos }) {
   const [config]   = useState(() => getCalibracionConfig(dispositivo.id));
   const [vista, setVista] = useState("tarjetas");
   const [showToggle, setShowToggle] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refrescar = useCallback(() => {
+    setIsRefreshing(true);
     setLavadoras(simulateDeviceLiveState(dispositivo.id, productos));
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 800);
   }, [dispositivo.id, productos]);
 
   useEffect(() => {
@@ -319,8 +338,13 @@ function DeviceLiveDataPanel({ dispositivo, productos }) {
             </div>
           )}
         </div>
-        <button className="cd-icon-btn" title="Actualizar" onClick={refrescar}>
-          <MdRefresh size={18} />
+        <button
+          className="cd-icon-btn"
+          title="Actualizar"
+          onClick={refrescar}
+          disabled={isRefreshing}
+        >
+          <MdRefresh size={18} className={isRefreshing ? "dev-refresh-spin" : ""} />
         </button>
       </div>
 

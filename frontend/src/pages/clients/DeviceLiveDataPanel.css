@@ -1,5 +1,5 @@
 /*
-  DatosEnVivoModal.css
+  DeviceLiveDataPanel.css
   Dos vistas: tarjetas de lavadoras y diagrama P&ID (Ajustes esquemáticos).
   El diagrama usa la misma estructura de la referencia CM2W:
     - Dos tuberías horizontales (AIR / AGUA) como columna vertebral
@@ -356,6 +356,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 16px;
 }
 
 .dev-esquema-lav-row {
@@ -390,3 +391,71 @@
 .dev-pid-img.bomba    { width: 50px; height: 54px; }
 .dev-pid-img.deposito { width: 44px; height: 50px; }
 .dev-pid-img.flecha   { width: 14px; height: 20px; }
+
+/* Indicadores de estado en tarjeta de lavadora del esquema */
+.dev-esquema-lav-indicators {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  display: flex;
+  gap: 3px;
+}
+
+.dev-esquema-lav-indicator-dot {
+  width: 5px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.dev-esquema-lav-indicator-dot.blue {
+  background-color: #6366f1;
+}
+
+.dev-esquema-lav-indicator-dot.red {
+  background-color: #ef4444;
+}
+
+.dev-esquema-lav-indicator-dot.green {
+  background-color: #22c55e;
+}
+
+.dev-esquema-lav-indicator-dot.blink {
+  animation: dev-indicator-blink 1s infinite alternate;
+}
+
+@keyframes dev-indicator-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.25;
+  }
+}
+
+/* Indicador de bomba activa */
+.dev-bomba-active-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.8);
+  z-index: 10;
+}
+
+/* Animación de spin para el botón de refrescar */
+.dev-refresh-spin {
+  animation: dev-spin-animation 0.8s linear;
+}
+
+@keyframes dev-spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
