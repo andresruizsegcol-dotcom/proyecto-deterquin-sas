@@ -102,6 +102,18 @@ function ProgramaDetallePage() {
     }));
   };
 
+  const toggleLavadora = (name) => {
+    setDirty(true);
+    const list = (form.lavadoras || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const newList = list.includes(name)
+      ? list.filter((n) => n !== name)
+      : [...list, name];
+    handleChange("lavadoras", newList.join(", "));
+  };
+
   const guardar = () => {
     const updated = { ...programa, ...form };
     const actualizados = programas.map((p) =>
@@ -300,27 +312,29 @@ function ProgramaDetallePage() {
                 </div>
 
                 <div className="pd-field" style={{ marginTop: 8 }}>
-                  <label>Lavadoras del programa</label>
-                  <div className="pd-lavadoras-badges">
-                    {lavadorasList.length === 0 ? (
+                  <label>Lavadora en uso</label>
+                  <div className="signal-badges" style={{ marginTop: 6 }}>
+                    {(calibracion?.lavadoras || []).length === 0 ? (
                       <span style={{ color: "#94a3b8", fontSize: 12 }}>
-                        Sin lavadoras asignadas
+                        No hay lavadoras configuradas para este dispositivo.
                       </span>
                     ) : (
-                      lavadorasList.map((lav, i) => (
-                        <span key={i} className="pd-lavadora-badge">
-                          {lav}
-                        </span>
-                      ))
+                      (calibracion.lavadoras || []).map((lav) => {
+                        const active = lavadorasList.includes(lav.nombre);
+                        return (
+                          <span
+                            key={lav.id}
+                            className={`signal-badge ${active ? "active" : ""}`}
+                            onClick={() => toggleLavadora(lav.nombre)}
+                            style={{ cursor: "pointer" }}
+                            title="Click para activar/desactivar"
+                          >
+                            {lav.nombre}
+                          </span>
+                        );
+                      })
                     )}
                   </div>
-                  <input
-                    name="lavadoras"
-                    value={form.lavadoras}
-                    onChange={handleInputChange}
-                    placeholder="Separar por comas: UNIMAC 90Kg - 1, UNIMAC 90Kg - 2"
-                    style={{ marginTop: 6, fontSize: 12 }}
-                  />
                 </div>
 
                 <div className="pd-checkbox-row">

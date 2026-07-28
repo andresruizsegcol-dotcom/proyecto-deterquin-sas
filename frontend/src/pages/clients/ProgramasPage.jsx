@@ -393,30 +393,32 @@ function ProgramasPage() {
                 <input name="categoria" value={form.categoria} onChange={handleChange} placeholder="Ej: Toallas" />
               </div>
               <div className="prog-form-full">
-                <label>Lavadoras asociadas</label>
+                <label>Lavadora en uso</label>
                 {lavadorasList.length === 0 ? (
                   <p style={{ fontSize: "12px", color: "#ef4444", margin: "4px 0 0 0" }}>
                     No hay lavadoras habilitadas para este dispositivo. Agrégalas en Ajustes del Dispositivo.
                   </p>
                 ) : (
-                  <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", marginTop: "6px" }}>
+                  <div className="signal-badges" style={{ marginTop: "6px" }}>
                     {lavadorasList.map((lav) => {
                       const selectedLavs = form.lavadoras ? form.lavadoras.split(",").map(s => s.trim()).filter(Boolean) : [];
-                      const isChecked = selectedLavs.includes(lav.nombre);
-                      const handleCheckboxChange = (e) => {
-                        let nextSelected;
-                        if (e.target.checked) {
-                          nextSelected = [...selectedLavs, lav.nombre];
-                        } else {
-                          nextSelected = selectedLavs.filter(name => name !== lav.nombre);
-                        }
-                        setForm(f => ({ ...f, lavadoras: nextSelected.join(", ") }));
+                      const active = selectedLavs.includes(lav.nombre);
+                      const handleToggle = () => {
+                        const newList = active
+                          ? selectedLavs.filter(name => name !== lav.nombre)
+                          : [...selectedLavs, lav.nombre];
+                        setForm(f => ({ ...f, lavadoras: newList.join(", ") }));
                       };
                       return (
-                        <label key={lav.id} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", cursor: "pointer", color: "#1e293b", textTransform: "none", fontWeight: "normal" }}>
-                          <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} style={{ cursor: "pointer" }} />
+                        <span
+                          key={lav.id}
+                          className={`signal-badge ${active ? "active" : ""}`}
+                          onClick={handleToggle}
+                          style={{ cursor: "pointer" }}
+                          title="Click para activar/desactivar"
+                        >
                           {lav.nombre}
-                        </label>
+                        </span>
                       );
                     })}
                   </div>

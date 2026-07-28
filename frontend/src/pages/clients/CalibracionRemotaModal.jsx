@@ -94,7 +94,13 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
     const next = {
       ...config,
       bombas: config.bombas.map((b) =>
-        b.id === pendingQuantity.bombaId ? { ...b, cantidadCalibrada: Number(cantidadInput) } : b
+        b.id === pendingQuantity.bombaId
+          ? {
+              ...b,
+              cantidadCalibrada: Number(cantidadInput),
+              cantidadACalibrarMl: Number(cantidadInput),
+            }
+          : b
       ),
     };
     persist(next);
@@ -213,7 +219,9 @@ function CalibracionRemotaModal({ dispositivo, productos, onClose }) {
                   <div className="calib-row">
                     <div className="calib-field">
                       <label>Cantidad de calibración actual (ml)</label>
-                      <p className="calib-readonly-val">{bombaPendiente?.cantidadCalibrada ?? 0}</p>
+                      <p className="calib-readonly-val">
+                        {bombaPendiente?.cantidadCalibrada ?? bombaPendiente?.cantidadACalibrarMl ?? 0}
+                      </p>
                     </div>
                     <div className="calib-field">
                       <label>Valor objetivo (ml)</label>
