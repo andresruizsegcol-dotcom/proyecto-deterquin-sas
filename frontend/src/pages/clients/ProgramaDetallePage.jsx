@@ -192,7 +192,25 @@ function ProgramaDetallePage() {
       temperatureMonitoring: false,
       productos: [],
     };
-    handleChange("pasos", [...form.pasos, newPaso]);
+
+    // Construir la lista actualizada de pasos
+    const newPasos = [...form.pasos, newPaso];
+
+    // Actualizar el form local
+    const updatedForm = { ...form, pasos: newPasos };
+    setForm(updatedForm);
+    setDirty(false);
+
+    // Persistir inmediatamente en el storage para que PasoDetallePage lo encuentre
+    const updatedPrograma = { ...programa, ...updatedForm, pasos: newPasos };
+    const updatedProgramas = programas.map((p) =>
+      String(p.id) === String(programaId) ? updatedPrograma : p
+    );
+    saveProgramsForDevice(deviceId, updatedProgramas);
+    setProgramas(updatedProgramas);
+
+    // Navegar directamente al detalle del paso recién creado para configurarlo
+    navigate(`/dispositivos/${deviceId}/programas/${programaId}/pasos/${newPaso.id}`);
   };
 
   const deletePaso = (pasoId) => {
