@@ -315,6 +315,8 @@
   font-size: 13px;
   box-sizing: border-box;
   transition: border-color 0.15s;
+  color: #1e293b;
+  background-color: #ffffff;
 }
 
 .pd-field input:focus,
@@ -390,6 +392,8 @@
   border-radius: 8px;
   font-size: 13px;
   box-sizing: border-box;
+  color: #1e293b;
+  background-color: #ffffff;
 }
 
 /* Price panel */
@@ -683,3 +687,106 @@
 .prog-modal-body {
   padding: 0;
 }
+
+/* Señal 1 reserved block */
+.prog-senal1-block {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prog-senal1-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.prog-senal1-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.prog-senal1-hint {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.prog-senal1-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.prog-senal1-fields label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.prog-senal1-fields input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 7px;
+  font-size: 13px;
+  box-sizing: border-box;
+  color: #1e293b;
+  background: #fff;
+}
+
+/* Reserved signal badge */
+.signal-badge-reserved {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: #bae6fd !important;
+  cursor: default !important;
+  opacity: 0.8;
+}
+
+/* Sequential activation indicator in pasos table */
+.pd-senal-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.pd-senal-sequential {
+  display: inline-flex;
+  align-items: center;
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: help;
+}
+
+/* Señal 1 panel inside program detail */
+.pd-senal1-panel {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1.5px solid #bfdbfe !important;
+  border-radius: 10px;
+}
+

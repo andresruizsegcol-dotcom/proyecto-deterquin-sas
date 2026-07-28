@@ -22,6 +22,10 @@ const PROGRAM_FORM_DEFAULT = {
   lavadoras: "",
   inicioManual: false,
   arranqueAutomatico: false,
+  // Señal 1: rango de duración que identifica este programa
+  senal1Min: "",
+  senal1Max: "",
+  // Legacy fields (kept for backward compat)
   duracionMin: "",
   duracionMax: "",
   senales: [],
@@ -30,7 +34,7 @@ const PROGRAM_FORM_DEFAULT = {
   pasos: [],
 };
 
-export function SignalBadges({ selected, onToggle, readOnly = false, showDosisDirecta = false, dosisDirecta = false, onToggleDosis }) {
+export function SignalBadges({ selected, onToggle, readOnly = false, showDosisDirecta = false, dosisDirecta = false, onToggleDosis, disableSenal1 = false }) {
   return (
     <div className="signal-badges">
       {showDosisDirecta && (
@@ -43,14 +47,15 @@ export function SignalBadges({ selected, onToggle, readOnly = false, showDosisDi
       )}
       {SENALES.map((n) => {
         const active = selected.includes(n);
+        const isSenal1Reserved = disableSenal1 && n === 1;
         return (
           <span
             key={n}
-            className={`signal-badge ${active ? "active" : ""} ${readOnly ? "readonly" : ""}`}
-            onClick={readOnly ? undefined : () => onToggle(n)}
-            title={readOnly ? undefined : "Click para activar/desactivar"}
+            className={`signal-badge ${active ? "active" : ""} ${readOnly || isSenal1Reserved ? "readonly" : ""} ${isSenal1Reserved ? "signal-badge-reserved" : ""}`}
+            onClick={readOnly || isSenal1Reserved ? undefined : () => onToggle(n)}
+            title={isSenal1Reserved ? "Señal 1 reservada para identificación del programa" : readOnly ? undefined : "Click para activar/desactivar"}
           >
-            Señal {n}
+            Señal {n}{isSenal1Reserved ? " 🔒" : ""}
           </span>
         );
       })}
@@ -129,28 +134,32 @@ function ProgramasPage() {
   };
 
   const addPaso = () => {
-    setForm((f) => ({
-      ...f,
-      pasos: [
-        ...f.pasos,
-        {
-          id: Date.now(),
-          nombre: `Paso ${f.pasos.length + 1}`,
-          senal: 1,
-          cantidadMl: "",
-          precioPorKg: "",
-          ozoneDosing: 0,
-          activoOn: true,
-          risingEdge: true,
-          fallingEdge: false,
-          opcional: false,
-          senalesPaso: [],
-          dosisDirecta: false,
-          temperatureMonitoring: false,
-          productos: [],
-        },
-      ],
-    }));
+    setForm((f) => {
+      // Pasos empiezan en Señal 2 (Señal 1 reservada para identificar el programa)
+      const nextSenal = 2 + f.pasos.length;
+      return {
+        ...f,
+        pasos: [
+          ...f.pasos,
+          {
+            id: Date.now(),
+            nombre: `Señal ${nextSenal}`,
+            senal: nextSenal,
+            cantidadMl: "",
+            precioPorKg: "",
+            ozoneDosing: 0,
+            activoOn: true,
+            risingEdge: true,
+            fallingEdge: false,
+            opcional: false,
+            senalesPaso: [nextSenal],
+            dosisDirecta: false,
+            temperatureMonitoring: false,
+            productos: [],
+          },
+        ],
+      };
+    });
   };
 
   const updatePaso = (pasoId, field, value) => {
@@ -424,6 +433,25 @@ function ProgramasPage() {
                   </div>
                 )}
               </div>
+              {/* Señal 1 — identificador único del programa (siempre visible) */}
+              <div className="prog-form-full">
+                <div className="prog-senal1-block">
+                  <div className="prog-senal1-label">
+                    <span className="prog-senal1-badge">Señal 1 🔒</span>
+                    <span className="prog-senal1-hint">Duración de pulso que identifica este programa. Debe ser única entre programas.</span>
+                  </div>
+                  <div className="prog-senal1-fields">
+                    <div>
+                      <label>Duración Señal 1 mín (s)</label>
+                      <input name="senal1Min" type="number" min="0" step="0.1" value={form.senal1Min} onChange={handleChange} placeholder="Ej: 2" />
+                    </div>
+                    <div>
+                      <label>Duración Señal 1 máx (s)</label>
+                      <input name="senal1Max" type="number" min="0" step="0.1" value={form.senal1Max} onChange={handleChange} placeholder="Ej: 4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="prog-checkbox-row">
                 <input type="checkbox" name="inicioManual" checked={form.inicioManual} onChange={handleChange} id="pg-inicioManual" />
                 <label htmlFor="pg-inicioManual" style={{ margin: 0 }}>Inicio manual</label>
@@ -444,7 +472,7 @@ function ProgramasPage() {
                   </div>
                   <div className="prog-form-full">
                     <label>Combinación de señales de arranque automático</label>
-                    <SignalBadges selected={form.senales} onToggle={toggleSenal} />
+                    <SignalBadges selected={form.senales} onToggle={toggleSenal} disableSenal1 />
                   </div>
                 </>
               )}

@@ -28,6 +28,7 @@ function ProgramaDetallePage() {
   const [activeTab, setActiveTab] = useState("main");
   const [showOpciones, setShowOpciones] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("idle"); // 'idle' | 'saving' | 'success'
 
   const programa = programas.find((p) => String(p.id) === String(programaId));
 
@@ -40,6 +41,8 @@ function ProgramaDetallePage() {
       lavadoras: programa.lavadoras || "",
       inicioManual: programa.inicioManual || false,
       arranqueAutomatico: programa.arranqueAutomatico || false,
+      senal1Min: programa.senal1Min ?? programa.duracionMin ?? "",
+      senal1Max: programa.senal1Max ?? programa.duracionMax ?? "",
       duracionMin: programa.duracionMin ?? "",
       duracionMax: programa.duracionMax ?? "",
       senales: programa.senales || [],
@@ -76,6 +79,8 @@ function ProgramaDetallePage() {
   }
 
   const { device, clienteNombre } = match;
+  const [isEditing, setIsEditing] = useState(false);
+
   const calibracion = getCalibracionConfig(deviceId);
   const lavadorasList = (form.lavadoras || "")
     .split(",")
@@ -88,11 +93,13 @@ function ProgramaDetallePage() {
   };
 
   const handleInputChange = (e) => {
+    if (!isEditing) return;
     const { name, value, type, checked } = e.target;
     handleChange(name, type === "checkbox" ? checked : value);
   };
 
   const toggleSenal = (n) => {
+    if (!isEditing) return;
     setDirty(true);
     setForm((f) => ({
       ...f,
@@ -103,6 +110,7 @@ function ProgramaDetallePage() {
   };
 
   const toggleLavadora = (name) => {
+    if (!isEditing) return;
     setDirty(true);
     const list = (form.lavadoras || "")
       .split(",")
@@ -115,6 +123,9 @@ function ProgramaDetallePage() {
   };
 
   const guardar = () => {
+    if (saveStatus !== "idle") return;
+    setSaveStatus("saving");
+
     const updated = { ...programa, ...form };
     const actualizados = programas.map((p) =>
       String(p.id) === String(programaId) ? updated : p
@@ -122,6 +133,15 @@ function ProgramaDetallePage() {
     saveProgramsForDevice(deviceId, actualizados);
     setProgramas(actualizados);
     setDirty(false);
+
+    // Simulate loading delay for saving feedback
+    setTimeout(() => {
+      setSaveStatus("success");
+      setTimeout(() => {
+        setSaveStatus("idle");
+        setIsEditing(false);
+      }, 1500);
+    }, 1000);
   };
 
   const refresh = () => {
@@ -154,10 +174,12 @@ function ProgramaDetallePage() {
   };
 
   const addPaso = () => {
+    // Pasos empiezan desde Señal 2 (Señal 1 está reservada para identificar el programa)
+    const nextSenal = 2 + form.pasos.length;
     const newPaso = {
       id: Date.now(),
-      nombre: `Paso ${form.pasos.length + 1}`,
-      senal: 1,
+      nombre: `Señal ${nextSenal}`,
+      senal: nextSenal,
       cantidadMl: "",
       precioPorKg: "",
       ozoneDosing: 0,
@@ -165,7 +187,7 @@ function ProgramaDetallePage() {
       risingEdge: true,
       fallingEdge: false,
       opcional: false,
-      senalesPaso: [],
+      senalesPaso: [nextSenal],
       dosisDirecta: false,
       temperatureMonitoring: false,
       productos: [],
@@ -207,15 +229,33 @@ function ProgramaDetallePage() {
           <button className="cd-header-btn" onClick={refresh}>
             <MdRefresh size={18} /><span>Actualizar</span>
           </button>
-          <button className="cd-header-btn" onClick={guardar}>
-            <MdCheck size={18} /><span>Guardar</span>
-          </button>
-          <button
-            className="cd-header-btn"
-            onClick={() => navigate(`/dispositivos/${deviceId}/programas`)}
-          >
-            <MdClose size={18} /><span>Cancelar</span>
-          </button>
+          {!isEditing ? (
+            <button className="cd-header-btn" onClick={() => setIsEditing(true)}>
+              <MdSettings size={18} /><span>Editar</span>
+            </button>
+          ) : (
+            <button
+              className="cd-header-btn"
+              onClick={guardar}
+              disabled={saveStatus !== "idle"}
+            >
+              {saveStatus === "saving" ? (
+                <span className="save-btn-spinner" />
+              ) : saveStatus === "success" ? (
+                <MdCheck size={18} color="#10b981" />
+              ) : (
+                <MdCheck size={18} />
+              )}
+              <span>
+                {saveStatus === "saving"
+                  ? "Guardando..."
+                  : saveStatus === "success"
+                  ? "Guardado!"
+                  : "Guardar"}
+              </span>
+            </button>
+          )}
+
           <div style={{ position: "relative" }}>
             <button
               className="cd-header-btn"
@@ -261,7 +301,7 @@ function ProgramaDetallePage() {
             </div>
           </div>
           <div className="pd-info-mid">
-            <span className="pd-info-version-badge">Multi-system v14.2</span>
+            <span className="pd-info-version-badge">Multi-system v0.1.0</span>
           </div>
           <div className="pd-info-right">
             <div className="pd-info-status">
@@ -308,6 +348,7 @@ function ProgramaDetallePage() {
                     value={form.nombre}
                     onChange={handleInputChange}
                     placeholder="Nombre del programa"
+                    disabled={!isEditing}
                   />
                 </div>
 
@@ -324,10 +365,10 @@ function ProgramaDetallePage() {
                         return (
                           <span
                             key={lav.id}
-                            className={`signal-badge ${active ? "active" : ""}`}
+                            className={`signal-badge ${active ? "active" : ""} ${!isEditing ? "readonly" : ""}`}
                             onClick={() => toggleLavadora(lav.nombre)}
-                            style={{ cursor: "pointer" }}
-                            title="Click para activar/desactivar"
+                            style={{ cursor: isEditing ? "pointer" : "default" }}
+                            title={isEditing ? "Click para activar/desactivar" : undefined}
                           >
                             {lav.nombre}
                           </span>
@@ -344,6 +385,7 @@ function ProgramaDetallePage() {
                     name="inicioManual"
                     checked={form.inicioManual}
                     onChange={handleInputChange}
+                    disabled={!isEditing}
                   />
                   <label htmlFor="pd-inicioManual">Inicio manual</label>
                 </div>
@@ -357,6 +399,7 @@ function ProgramaDetallePage() {
                       name="arranqueAutomatico"
                       checked={form.arranqueAutomatico}
                       onChange={handleInputChange}
+                      disabled={!isEditing}
                     />
                     <label htmlFor="pd-arranqueAuto">Inicio automático ⓘ</label>
                   </div>
@@ -365,24 +408,26 @@ function ProgramaDetallePage() {
                     <div className="pd-auto-fields">
                       <div className="pd-auto-row">
                         <div>
-                          <label>Duración de la señal, s (mín) ⓘ</label>
-                          <input
-                            name="duracionMin"
-                            type="number"
-                            min="0"
-                            value={form.duracionMin}
-                            onChange={handleInputChange}
-                          />
+                           <label>Duración de la señal, s (mín) ⓘ</label>
+                           <input
+                             name="duracionMin"
+                             type="number"
+                             min="0"
+                             value={form.duracionMin}
+                             onChange={handleInputChange}
+                             disabled={!isEditing}
+                           />
                         </div>
                         <div>
-                          <label>Duración de la señal, s (máx) ⓘ</label>
-                          <input
-                            name="duracionMax"
-                            type="number"
-                            min="0"
-                            value={form.duracionMax}
-                            onChange={handleInputChange}
-                          />
+                           <label>Duración de la señal, s (máx) ⓘ</label>
+                           <input
+                             name="duracionMax"
+                             type="number"
+                             min="0"
+                             value={form.duracionMax}
+                             onChange={handleInputChange}
+                             disabled={!isEditing}
+                           />
                         </div>
                       </div>
                       <div>
@@ -390,6 +435,7 @@ function ProgramaDetallePage() {
                         <SignalBadges
                           selected={form.senales}
                           onToggle={toggleSenal}
+                          readOnly={!isEditing}
                         />
                       </div>
                     </div>
@@ -405,7 +451,44 @@ function ProgramaDetallePage() {
                     name="numero"
                     value={form.numero}
                     onChange={handleInputChange}
+                    disabled={!isEditing}
                   />
+                </div>
+
+                {/* Señal 1 — siempre visible, identifica el programa */}
+                <div className="pd-field pd-senal1-panel">
+                  <label>
+                    <span className="prog-senal1-badge" style={{ fontSize: 11 }}>Señal 1 🔒</span>
+                    {" "}Duración de pulso que identifica este programa
+                  </label>
+                  <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: 11, color: "#64748b" }}>Mín (s)</label>
+                      <input
+                        name="senal1Min"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        value={form.senal1Min}
+                        onChange={handleInputChange}
+                        placeholder="Ej: 2"
+                        disabled={!isEditing}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: 11, color: "#64748b" }}>Máx (s)</label>
+                      <input
+                        name="senal1Max"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        value={form.senal1Max}
+                        onChange={handleInputChange}
+                        placeholder="Ej: 4"
+                        disabled={!isEditing}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="pd-field">
@@ -414,6 +497,7 @@ function ProgramaDetallePage() {
                     name="categoria"
                     value={form.categoria}
                     onChange={handleInputChange}
+                    disabled={!isEditing}
                   >
                     <option value="">Select Program category</option>
                     <option value="Toallas">Toallas</option>
@@ -490,7 +574,7 @@ function ProgramaDetallePage() {
                 <h4>Pasos</h4>
                 <div className="pd-pasos-actions">
                   <button className="cd-add-btn" onClick={addPaso}>
-                    <MdAdd size={14} /> Pasos
+                    <MdAdd size={14} /> Añadir Paso
                   </button>
                   <button className="cd-icon-btn" title="Acciones">
                     <MdSettings size={16} /> <span style={{ fontSize: 11 }}>Acciones</span>
@@ -505,7 +589,7 @@ function ProgramaDetallePage() {
                 <table className="prog-table">
                   <thead>
                     <tr>
-                      <th>Paso</th>
+                      <th>Pasos</th>
                       <th>Nombre</th>
                       <th>Quantity per 1 kg</th>
                       <th>Price per 1 kg</th>
@@ -518,22 +602,28 @@ function ProgramaDetallePage() {
                   <tbody>
                     {form.pasos.map((paso, idx) => {
                       const productos = paso.productos || [];
-                      const qty = productos.reduce(
-                        (s, pr) =>
-                          s +
-                          (Number(pr.cantidadMlPorKg) || 0) +
-                          (Number(pr.cantidadGrPorKg) || 0),
-                        0
-                      );
                       const price = productos.reduce(
                         (s, pr) => s + (Number(pr.precioPorKg) || 0),
                         0
                       );
                       const cantMl = productos.reduce((s, pr) => s + (Number(pr.cantidadMlPorKg) || 0), 0);
                       const cantGr = productos.reduce((s, pr) => s + (Number(pr.cantidadGrPorKg) || 0), 0);
+                      // Detect steps sharing same signal (sequential activation)
+                      const senalNum = paso.senal ?? (idx + 2);
+                      const sharesSignal = form.pasos.filter(p => (p.senal ?? 2) === senalNum).length > 1;
+                      const senalLabel = `Señal ${senalNum}`;
                       return (
                         <tr key={paso.id}>
-                          <td>Paso {idx + 1}</td>
+                          <td>
+                            <span className="pd-senal-cell">
+                              {senalLabel}
+                              {sharesSignal && (
+                                <span className="pd-senal-sequential" title="Activación secuencial: comparte señal con otro paso">
+                                  seq
+                                </span>
+                              )}
+                            </span>
+                          </td>
                           <td
                             className="prog-name"
                             style={{ cursor: "pointer" }}
@@ -543,7 +633,7 @@ function ProgramaDetallePage() {
                               )
                             }
                           >
-                            {paso.nombre || `Paso ${idx + 1}`}
+                            {paso.nombre || senalLabel}
                           </td>
                           <td>
                             {cantMl.toFixed(2)} ml / {cantGr.toFixed(2)} gr

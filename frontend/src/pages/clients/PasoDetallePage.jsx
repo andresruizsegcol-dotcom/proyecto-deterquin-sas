@@ -289,7 +289,7 @@ function PasoDetallePage() {
             </div>
           </div>
           <div className="pd-info-mid">
-            <span className="pd-info-version-badge">Multi-system v14.2</span>
+            <span className="pd-info-version-badge">Multi-system v0.1.0</span>
           </div>
           <div className="pd-info-right">
             <div className="pd-info-status">
@@ -376,12 +376,16 @@ function PasoDetallePage() {
           {/* Empezar paso con señal */}
           <div className="paso-signal-section">
             <label>Empezar paso con señal ⓘ</label>
+            <p style={{ fontSize: 11, color: "#64748b", margin: "2px 0 6px 0" }}>
+              Señal 1 🔒 reservada — identifica el programa
+            </p>
             <SignalBadges
               selected={form.senalesPaso}
               onToggle={toggleSenalPaso}
               showDosisDirecta
               dosisDirecta={form.dosisDirecta}
               onToggleDosis={toggleDosisDirecta}
+              disableSenal1
             />
           </div>
 
