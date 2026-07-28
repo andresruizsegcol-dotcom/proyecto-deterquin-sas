@@ -10,6 +10,7 @@ import ClientsDetail from "../pages/clients/ClientsDetail";
 import DeviceDetailPage from "../pages/devices/DeviceDetailPage";
 import AjustesPage from "../pages/devices/AjustesPage";
 import ReportsPage from "../pages/reports/Reportspage";
+import UbicacionPage from "../pages/reports/UbicacionPage";
 import ProgramasPage from "../pages/clients/ProgramasPage";
 import ProgramaDetallePage from "../pages/clients/ProgramaDetallePage";
 import PasoDetallePage from "../pages/clients/PasoDetallePage";
@@ -47,6 +48,7 @@ function DashboardLayout() {
                 ReportsPage lee el parámetro para decidir qué contenido
                 renderizar. /informes sin tipo cae al primero por defecto. */}
             <Route path="/informes" element={<ReportsPage />} />
+            <Route path="/informes/ubicacion" element={<UbicacionPage />} />
             <Route path="/informes/:tipo" element={<ReportsPage />} />
           </Routes>
         </div>

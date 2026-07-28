@@ -22,6 +22,14 @@
   box-sizing: border-box;
 }
 
+/* Fix: Leaflet tile images must use content-box or they render incorrectly */
+.leaflet-container img,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  box-sizing: content-box !important;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: var(--color-bg);
