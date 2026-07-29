@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import logo from "../../assets/logo.png";
 import {
@@ -10,10 +10,40 @@ import {
 import { REPORT_TYPES } from "../../constants/reportTypes";
 
 function Sidebar({ collapsed, setCollapsed }) {
-  const [activeItem, setActiveItem] = useState("dashboard");
-  const [showDashboardMenu, setShowDashboardMenu] = useState(false);
-  const [showInformesMenu, setShowInformesMenu] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Derive active item from the current URL so refresh / direct navigation works
+  const getActiveFromPath = (pathname) => {
+    if (pathname.startsWith("/informes/")) {
+      const slug = pathname.split("/informes/")[1].split("/")[0];
+      return `informes-${slug}`;
+    }
+    if (pathname === "/informes") return "informes";
+    if (pathname.startsWith("/dashboard/dispositivo")) return "dashboard-dispositivo";
+    if (pathname === "/" || pathname.startsWith("/dashboard")) return "dashboard";
+    if (pathname.startsWith("/clientes")) return "clientes";
+    if (pathname.startsWith("/dispositivos")) return "dispositivos";
+    return "dashboard";
+  };
+
+  const [activeItem, setActiveItem] = useState(() => getActiveFromPath(location.pathname));
+
+  // Auto-open submenus based on current route
+  const [showDashboardMenu, setShowDashboardMenu] = useState(
+    () => location.pathname.startsWith("/dashboard/")
+  );
+  const [showInformesMenu, setShowInformesMenu] = useState(
+    () => location.pathname.startsWith("/informes")
+  );
+
+  // Keep active item in sync when the URL changes (e.g. browser back/forward)
+  useEffect(() => {
+    const next = getActiveFromPath(location.pathname);
+    setActiveItem(next);
+    if (next.startsWith("informes")) setShowInformesMenu(true);
+    if (next.startsWith("dashboard-")) setShowDashboardMenu(true);
+  }, [location.pathname]);
 
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
@@ -34,10 +64,10 @@ function Sidebar({ collapsed, setCollapsed }) {
         <div>
           <button
             type="button"
-            className={`sidebar-item ${activeItem === "dashboard" ? "active" : ""} ${showDashboardMenu ? "open" : ""}`}
+            className={`sidebar-item ${activeItem === "dashboard" || activeItem === "dashboard-dispositivo" ? "active" : ""} ${showDashboardMenu ? "open" : ""}`}
             onClick={() => {
-              if (collapsed) { setActiveItem("dashboard"); navigate("/"); }
-              else { setShowDashboardMenu(v => !v); setActiveItem("dashboard"); }
+              if (collapsed) { navigate("/"); }
+              else { setShowDashboardMenu(v => !v); }
             }}
           >
             <MdDashboard size={20} />
@@ -53,7 +83,7 @@ function Sidebar({ collapsed, setCollapsed }) {
               <button
                 type="button"
                 className={`submenu-item ${activeItem === "dashboard-dispositivo" ? "active" : ""}`}
-                onClick={() => { setActiveItem("dashboard-dispositivo"); navigate("/dashboard/dispositivo"); }}
+                onClick={() => navigate("/dashboard/dispositivo")}
               >
                 <MdDashboard size={16} />
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -68,7 +98,7 @@ function Sidebar({ collapsed, setCollapsed }) {
         {/* Clientes */}
         <div
           className={`sidebar-item ${activeItem === "clientes" ? "active" : ""}`}
-          onClick={() => { setActiveItem("clientes"); navigate("/clientes"); }}
+          onClick={() => navigate("/clientes")}
         >
           <MdPeople size={24} />
           {!collapsed && <span>Clientes</span>}
@@ -77,7 +107,7 @@ function Sidebar({ collapsed, setCollapsed }) {
         {/* Dispositivos */}
         <div
           className={`sidebar-item ${activeItem === "dispositivos" ? "active" : ""}`}
-          onClick={() => { setActiveItem("dispositivos"); navigate("/dispositivos"); }}
+          onClick={() => navigate("/dispositivos")}
         >
           <MdDevices size={24} />
           {!collapsed && <span>Dispositivos</span>}
@@ -90,10 +120,10 @@ function Sidebar({ collapsed, setCollapsed }) {
         <div>
           <button
             type="button"
-            className={`sidebar-item ${activeItem === "informes" ? "active" : ""} ${showInformesMenu ? "open" : ""}`}
+            className={`sidebar-item ${activeItem === "informes" || activeItem.startsWith("informes-") ? "active" : ""} ${showInformesMenu ? "open" : ""}`}
             onClick={() => {
-              if (collapsed) { setActiveItem("informes"); navigate("/informes"); }
-              else { setShowInformesMenu(v => !v); setActiveItem("informes"); }
+              if (collapsed) { navigate("/informes"); }
+              else { setShowInformesMenu(v => !v); }
             }}
           >
             <MdDescription size={24} />
@@ -114,7 +144,7 @@ function Sidebar({ collapsed, setCollapsed }) {
                     key={report.slug}
                     type="button"
                     className={`submenu-item ${activeItem === itemKey ? "active" : ""}`}
-                    onClick={() => { setActiveItem(itemKey); navigate(`/informes/${report.slug}`); }}
+                    onClick={() => navigate(`/informes/${report.slug}`)}
                   >
                     <Icon size={16} />
                     <span style={{ fontWeight: 500 }}>{report.label}</span>

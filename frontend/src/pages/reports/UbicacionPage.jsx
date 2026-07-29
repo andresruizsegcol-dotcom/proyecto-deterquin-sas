@@ -110,9 +110,21 @@ export default function UbicacionPage() {
     const result = [];
     clientes.forEach((cliente, clienteIndex) => {
       getDevicesForClient(clienteIndex).forEach((device) => {
-        const coords = device.ubicacion
-          ? [device.ubicacion.lat, device.ubicacion.lng]
+        // Guard: device.ubicacion can be a plain string ("Lavanderia") instead
+        // of a {lat, lng} object. Only use it when both values are finite numbers.
+        const rawLat = device.ubicacion?.lat;
+        const rawLng = device.ubicacion?.lng;
+        const hasValidCoords =
+          typeof rawLat === "number" && isFinite(rawLat) &&
+          typeof rawLng === "number" && isFinite(rawLng);
+
+        const coords = hasValidCoords
+          ? [rawLat, rawLng]
           : seedCoords(device.id, clienteIndex);
+
+        // Final safety: skip entry if coords still contains non-finite values
+        if (!isFinite(coords[0]) || !isFinite(coords[1])) return;
+
         result.push({ device, clienteNombre: cliente.nombre, clienteIndex, coords });
       });
     });
