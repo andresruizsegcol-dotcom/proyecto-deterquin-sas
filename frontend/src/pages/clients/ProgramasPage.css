@@ -790,3 +790,42 @@
   border-radius: 10px;
 }
 
+@media (max-width: 767px) {
+  .prog-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .prog-toolbar > * {
+    width: 100%;
+  }
+  .pd-columns {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pd-col-left, .pd-col-right {
+    width: 100% !important;
+    flex: none !important;
+  }
+  .prog-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pd-actions-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .prog-bomba-field {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pd-top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+

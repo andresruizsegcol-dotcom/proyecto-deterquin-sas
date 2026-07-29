@@ -240,26 +240,44 @@
   .cd-body {
     padding: 10px;
   }
-
   .cd-client-info-card {
     flex-direction: column;
     gap: 12px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
+  .cd-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+  }
+  .cd-header-title {
+    width: 100%;
+    font-size: 13px;
+  }
   .cd-client-info-left {
     border-right: none;
     padding-right: 0;
   }
-
   .cd-client-info-mid {
     padding: 0;
     border-right: none;
   }
-
   .cd-section {
     padding: 14px;
+  }
+  .cd-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cd-stats-row {
+    grid-template-columns: 1fr;
+  }
+  .cd-devices-grid {
+    grid-template-columns: 1fr;
   }
 }
 

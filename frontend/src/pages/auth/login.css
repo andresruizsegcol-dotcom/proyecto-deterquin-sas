@@ -213,17 +213,35 @@ input:focus {
     height: auto;
     padding: 20px;
   }
-
   .left {
     display: none;
   }
-
   .right {
     width: 100%;
   }
-
   .login-box {
     background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  .login-box {
+    padding: 16px;
+  }
+  .options {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    padding-left: 0;
+  }
+  .options a {
+    padding-right: 0;
+  }
+  .logo {
+    width: 180px;
   }
 }
 

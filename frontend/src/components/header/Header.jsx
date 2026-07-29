@@ -3,8 +3,9 @@ import "./Header.css";
 import { getRawItem, removeRawItem } from "../../services/localMock";
 import HeaderActions from "./HeaderActions";
 import UserMenu from "./UserMenu";
+import { MdMenu } from "react-icons/md";
 
-function Header() {
+function Header({ onMenuOpen }) {
   const userName = getRawItem("userName") || "Usuario";
   const navigate = useNavigate();
 
@@ -18,7 +19,11 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="header-left" />
+      <div className="header-left">
+        <button className="header-menu-toggle" onClick={onMenuOpen} aria-label="Open menu">
+          <MdMenu size={24} />
+        </button>
+      </div>
 
       <div className="header-right">
         <HeaderActions />

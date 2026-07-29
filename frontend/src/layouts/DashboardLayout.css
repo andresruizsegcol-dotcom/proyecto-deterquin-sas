@@ -48,3 +48,30 @@
   padding: 10px;
   background: #f0f4f8;
 }
+
+/* Sidebar Overlay for Mobile */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1500;
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .dashboard-layout > aside:not(.collapsed),
+  .dashboard-layout > aside.collapsed {
+    width: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+}

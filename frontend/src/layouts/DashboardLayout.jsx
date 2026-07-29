@@ -18,12 +18,30 @@ import "./DashboardLayout.css";
 
 function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  // Mobile drawer — only used on screens ≤767px (controlled via CSS classes)
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <div className="dashboard-layout">
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      {/* Overlay — closes the drawer when tapped outside on mobile */}
+      {mobileOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={closeMobile}
+          aria-hidden="true"
+        />
+      )}
+
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
       <div className="main-content">
-        <Header />
+        <Header onMenuOpen={() => setMobileOpen(true)} />
         <div className="page-content">
           <Routes>
             <Route path="/" element={<DashboardPage />} />

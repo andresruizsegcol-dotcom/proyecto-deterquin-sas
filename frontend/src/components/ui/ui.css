@@ -114,3 +114,13 @@
 .ui-loader-label {
 	white-space: nowrap;
 }
+
+@media (max-width: 480px) {
+	.ui-btn {
+		width: 100%;
+		text-align: center;
+	}
+	.ui-input {
+		width: 100%;
+	}
+}

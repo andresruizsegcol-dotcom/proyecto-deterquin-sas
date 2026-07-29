@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import { REPORT_TYPES } from "../../constants/reportTypes";
 
-function Sidebar({ collapsed, setCollapsed }) {
+function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,8 +45,15 @@ function Sidebar({ collapsed, setCollapsed }) {
     if (next.startsWith("dashboard-")) setShowDashboardMenu(true);
   }, [location.pathname]);
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    if (setMobileOpen) {
+      setMobileOpen(false); // Close mobile menu drawer on navigation
+    }
+  };
+
   return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}>
 
       <div className="sidebar-top">
         <div className="sidebar-logo">
@@ -66,7 +73,7 @@ function Sidebar({ collapsed, setCollapsed }) {
             type="button"
             className={`sidebar-item ${activeItem === "dashboard" || activeItem === "dashboard-dispositivo" ? "active" : ""} ${showDashboardMenu ? "open" : ""}`}
             onClick={() => {
-              if (collapsed) { navigate("/"); }
+              if (collapsed) { handleNavigation("/"); }
               else { setShowDashboardMenu(v => !v); }
             }}
           >
@@ -83,7 +90,7 @@ function Sidebar({ collapsed, setCollapsed }) {
               <button
                 type="button"
                 className={`submenu-item ${activeItem === "dashboard-dispositivo" ? "active" : ""}`}
-                onClick={() => navigate("/dashboard/dispositivo")}
+                onClick={() => handleNavigation("/dashboard/dispositivo")}
               >
                 <MdDashboard size={16} />
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -98,7 +105,7 @@ function Sidebar({ collapsed, setCollapsed }) {
         {/* Clientes */}
         <div
           className={`sidebar-item ${activeItem === "clientes" ? "active" : ""}`}
-          onClick={() => navigate("/clientes")}
+          onClick={() => handleNavigation("/clientes")}
         >
           <MdPeople size={24} />
           {!collapsed && <span>Clientes</span>}
@@ -107,7 +114,7 @@ function Sidebar({ collapsed, setCollapsed }) {
         {/* Dispositivos */}
         <div
           className={`sidebar-item ${activeItem === "dispositivos" ? "active" : ""}`}
-          onClick={() => navigate("/dispositivos")}
+          onClick={() => handleNavigation("/dispositivos")}
         >
           <MdDevices size={24} />
           {!collapsed && <span>Dispositivos</span>}
@@ -122,7 +129,7 @@ function Sidebar({ collapsed, setCollapsed }) {
             type="button"
             className={`sidebar-item ${activeItem === "informes" || activeItem.startsWith("informes-") ? "active" : ""} ${showInformesMenu ? "open" : ""}`}
             onClick={() => {
-              if (collapsed) { navigate("/informes"); }
+              if (collapsed) { handleNavigation("/informes"); }
               else { setShowInformesMenu(v => !v); }
             }}
           >
@@ -144,7 +151,7 @@ function Sidebar({ collapsed, setCollapsed }) {
                     key={report.slug}
                     type="button"
                     className={`submenu-item ${activeItem === itemKey ? "active" : ""}`}
-                    onClick={() => navigate(`/informes/${report.slug}`)}
+                    onClick={() => handleNavigation(`/informes/${report.slug}`)}
                   >
                     <Icon size={16} />
                     <span style={{ fontWeight: 500 }}>{report.label}</span>

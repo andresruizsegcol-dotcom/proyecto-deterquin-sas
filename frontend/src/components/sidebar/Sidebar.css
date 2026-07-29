@@ -202,3 +202,28 @@
 .sidebar.collapsed .sidebar-item svg {
   margin: 0;
 }
+
+@media (max-width: 767px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.25);
+    width: 250px;
+    min-width: 250px;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  /* Hide the toggle collapse button inside the drawer on mobile */
+  .sidebar .menu-button {
+    display: none;
+  }
+  .sidebar-logo {
+    margin: 0 auto;
+  }
+}

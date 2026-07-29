@@ -148,16 +148,28 @@
 }
 
 @media (max-width: 900px) {
-  .dashboard-device-page {
-    padding: 18px;
-  }
-
-  .dashboard-device-header h2 {
-    font-size: 22px;
-  }
+  .dashboard-device-page { padding: 18px; }
+  .dashboard-device-header h2 { font-size: 22px; }
+  .dsp-widget-grid { grid-template-columns: 1fr; }
 }
 
-/* ── Widgets del Dashboard del dispositivo ── */
+@media (max-width: 767px) {
+  .dashboard-device-page { padding: 12px; }
+  .dashboard-device-filters { flex-direction: column; align-items: stretch; gap: 10px; }
+  .device-select-wrapper { min-width: unset; width: 100%; }
+  .device-select-button { max-width: 100%; }
+  .selected-device-box { max-width: 100%; }
+  .dsp-widget-grid { gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .dashboard-device-page { padding: 8px; }
+  .dashboard-device-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .dashboard-device-header h2 { font-size: 18px; }
+  .dsp-table th:nth-child(n+4),
+  .dsp-table td:nth-child(n+4) { display: none; }
+}
+
 .dsp-widget-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -250,35 +250,29 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 1024px) {
-  .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+@media (max-width: 1023px) {
+  .dashboard-page { padding: 16px; gap: 16px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 640px) {
-  .dashboard-page {
-    padding: 16px;
-    gap: 16px;
-  }
-
-  .kpi-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .kpi-card {
-    padding: 14px;
-  }
-
-  .kpi-value {
-    font-size: 22px;
-  }
-
-  /* En móvil ocultar columnas menos importantes */
+@media (max-width: 767px) {
+  .dashboard-page { padding: 12px; gap: 12px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-value { font-size: 24px; }
+  .dash-events-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .dash-events-link { width: 100%; justify-content: center; }
+  /* Hide less important columns on mobile */
   .dash-events-table th:nth-child(4),
   .dash-events-table td:nth-child(4),
   .dash-events-table th:nth-child(5),
-  .dash-events-table td:nth-child(5) {
-    display: none;
-  }
+  .dash-events-table td:nth-child(5) { display: none; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .kpi-card { padding: 14px; }
+  .kpi-value { font-size: 22px; }
+  /* Further reduce table columns on small phones */
+  .dash-events-table th:nth-child(3),
+  .dash-events-table td:nth-child(3) { display: none; }
 }

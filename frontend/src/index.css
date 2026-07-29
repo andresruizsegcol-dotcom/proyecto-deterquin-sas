@@ -159,33 +159,36 @@ html, body {
 }
 
 /* Responsive breakpoints */
-/* Tablet */
+
+/* Global image & media responsiveness */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal scroll globally */
+body {
+  overflow-x: hidden;
+}
+
+/* Laptop / Tablet (1024px) */
 @media (max-width: 1024px) {
   :root {
     --sidebar-width: 200px;
     --sidebar-collapsed: 80px;
   }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-content { padding: 14px; }
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  /* Layout stacks vertically */
-  .dashboard-layout { flex-direction: column; }
+/* Tablet (768px) */
+@media (max-width: 767px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-content { padding: 10px; }
+}
 
-  /* Sidebar becomes compact and full-width on top */
-  .sidebar {
-    width: 100%;
-    height: auto;
-    padding: 12px;
-    order: -1;
-  }
-  .sidebar.collapsed { width: 100%; }
-
-  /* Main content spacing */
-  .page-content { padding: 12px; }
+/* Mobile large (480px) */
+@media (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
-
-  /* Make sidebar items center when collapsed on mobile */
-  .sidebar.collapsed .sidebar-item { justify-content: flex-start; }
+  .page-content { padding: 8px; }
 }

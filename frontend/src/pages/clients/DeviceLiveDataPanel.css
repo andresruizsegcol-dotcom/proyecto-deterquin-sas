@@ -459,3 +459,25 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 767px) {
+  .dev-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .dev-view-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+  .dev-grid {
+    grid-template-columns: 1fr;
+  }
+  .dev-esquema-filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dev-esquema-filtro-item select {
+    width: 100%;
+  }
+}

@@ -359,13 +359,12 @@
   .page-title h2 {
     font-size: 20px;
   }
-
   .filter-search-btn input {
     width: 140px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
@@ -405,6 +404,29 @@
     border-top: 1px solid #eef2f7;
     padding: 10px 0 0;
     gap: 6px;
+  }
+
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .modal-box {
+    padding: 16px;
+    margin: 10px;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-icons-right {
+    grid-template-columns: 1fr;
+  }
+  .filter-input {
+    width: 100%;
+  }
+  .serial-search {
+    width: 100%;
   }
 }
 
