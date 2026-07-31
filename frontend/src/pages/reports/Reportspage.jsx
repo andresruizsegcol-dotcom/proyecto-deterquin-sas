@@ -324,120 +324,128 @@ function seriesToCSV(series) {
  *  - Fila 12+: datos (Duración como TEXTO LITERAL "1h 2m 20s")
  *  - Panel congelado debajo de la fila 10
  */
-async function exportDetalladoXlsx(rows) {
+// ── Exportador xlsx autocontenido para el informe DETALLADO ────────────────
+
+/**
+ * Función genérica de exportación a XLSX para Deterquin.
+ * Mantiene el diseño visual premium:
+ *  - Sin cuadrícula (showGridLines: false)
+ *  - Título con banda azul fusionada (Fila 1)
+ *  - Bandas de sección "Total" (Fila 4) y "Detalles/Datos" (Fila 8)
+ *  - Cabeceras con autofiltro y congelación debajo de la fila 10 (ySplit: 10)
+ *  - Estilos de Calibri, bordes finos, alineación inteligente y colores premium
+ */
+async function exportGenericXlsx({
+  titleText,
+  sheetName,
+  filename,
+  columns,      // [{ header, key, width, type, numFmt, highlightError }]
+  rows,         // [{ ... }]
+  totalText = "Total",
+  detallesText = "Detalles"
+}) {
   const wb = new ExcelJS.Workbook();
   wb.creator = "Deterquin";
   wb.created = new Date();
   wb.modified = new Date();
 
-  const ws = wb.addWorksheet("Informe de dosificación detallada", {
+  const ws = wb.addWorksheet(sheetName, {
     properties: { defaultRowHeight: 16 },
     views: [{ showGridLines: false, state: "frozen", ySplit: 10 }],
   });
 
-  // 7 columnas (idénticas a la imagen de referencia)
-  ws.columns = [
-    { width: 18 }, // Instalaciones
-    { width: 26 }, // Evento
-    { width: 26 }, // Origen del evento
-    { width: 34 }, // Programa
-    { width: 22 }, // Hora de inicio
-    { width: 22 }, // Hora de finalización
-    { width: 14 }, // Duración
-  ];
-  const COLS = ws.columnCount; // 7
+  ws.columns = columns.map((c) => ({ width: c.width || 15 }));
+  const COLS = columns.length;
 
   // 1) Banda título
-  const starts = rows.map((r) => new Date(r.horaInicio)).filter((d) => !Number.isNaN(d.getTime()));
-  const ends   = rows.map((r) => new Date(r.fecha))     .filter((d) => !Number.isNaN(d.getTime()));
-  const periodoTexto = (starts.length && ends.length)
-    ? `${fmtDateDot(new Date(Math.min(...starts.map((d) => d.getTime()))))} - ${fmtDateDot(new Date(Math.max(...ends.map((d) => d.getTime()))))}`
-    : "—";
-
   ws.mergeCells(1, 1, 1, COLS);
   const titleCell = ws.getCell(1, 1);
-  titleCell.value = `Periodo de informe: ${periodoTexto}`;
+  titleCell.value = titleText;
   applyStyle(titleCell, XLSX_STYLES.titleBand);
   ws.getRow(1).height = 22;
 
-  // 2) Banda "Total" (vacía)
+  // 2) Banda "Total" (vacía de datos por defecto, sólo la sección gris)
   ws.mergeCells(4, 1, 4, COLS);
   const totalCell = ws.getCell(4, 1);
-  totalCell.value = "Total";
+  totalCell.value = totalText;
   applyStyle(totalCell, XLSX_STYLES.sectionBand);
   ws.getRow(4).height = 18;
 
   // 3) Banda "Detalles"
   ws.mergeCells(8, 1, 8, COLS);
   const detCell = ws.getCell(8, 1);
-  detCell.value = "Detalles";
+  detCell.value = detallesText;
   applyStyle(detCell, XLSX_STYLES.sectionBand);
   ws.getRow(8).height = 18;
 
   // 4) Encabezados (fila 10)
-  const headers = [
-    "Instalaciones", "Evento", "Origen del evento", "Programa",
-    "Hora de inicio", "Hora de finalización", "Duración",
-  ];
-  headers.forEach((h, i) => {
+  columns.forEach((col, i) => {
     const c = ws.getCell(10, i + 1);
-    c.value = h;
+    c.value = col.header;
     applyStyle(c, XLSX_STYLES.header);
   });
   ws.getRow(10).height = 30;
 
   // 5) Datos (fila 12 en adelante)
-  const COL_KEYS = ["instalacion", "evento", "origen", "programa", "horaInicioText", "horaFinText", "duracionText"];
   rows.forEach((r, rIdx) => {
     const excelRow = ws.getRow(12 + rIdx);
-    const isError = (r.origenEvento || r.evento || "").toLowerCase().includes("error");
+    excelRow.height = 18;
 
-    // 0) Instalaciones
-    const c0 = excelRow.getCell(1);
-    c0.value = r.instalacion || r.clienteNombre || r.client || "";
-    applyStyle(c0, XLSX_STYLES.cell);
+    // Verificar si la fila completa representa un error/inactividad para posible resaltado selectivo
+    const isError = columns.some((col) => {
+      const valStr = String(r[col.key] || "").toLowerCase();
+      return valStr.includes("error") || valStr.includes("inactivo");
+    });
 
-    // 1) Evento (resaltado si es error)
-    const c1 = excelRow.getCell(2);
-    c1.value = r.origenEvento || r.evento || "";
-    applyStyle(c1, isError ? XLSX_STYLES.cellError : XLSX_STYLES.cell);
+    columns.forEach((col, colIdx) => {
+      const cell = excelRow.getCell(colIdx + 1);
+      const val = r[col.key];
 
-    // 2) Origen del evento
-    let origen = r.origen;
-    if (!origen) {
-      if (r.lavadoraId != null) origen = `Extractor de lavado ${r.lavadoraId}`;
-      else if (r.lavadora) origen = String(r.lavadora);
-      else origen = "";
-    }
-    const c2 = excelRow.getCell(3);
-    c2.value = origen;
-    applyStyle(c2, XLSX_STYLES.cell);
+      // Aplicar estilo de error si corresponde y la columna lo requiere
+      const cellStyle = (isError && col.highlightError) ? XLSX_STYLES.cellError : XLSX_STYLES.cell;
 
-    // 3) Programa
-    let programa = r.programaDescripcion;
-    if (!programa) {
-      const num = r.programaNumero ?? r.programaNum;
-      const name = r.programa || r.programaNombre || "";
-      programa = (num != null && name) ? `Programa ${num}: ${name}` : String(name || num || "");
-    }
-    const c3 = excelRow.getCell(4);
-    c3.value = programa;
-    applyStyle(c3, XLSX_STYLES.cell);
+      // Alineación según tipo
+      const alignment = { vertical: "middle" };
+      if (col.type === "number") {
+        alignment.horizontal = "right";
+      } else if (col.type === "date" || col.type === "boolean") {
+        alignment.horizontal = "center";
+      } else {
+        alignment.horizontal = "left";
+      }
 
-    // 4) Hora de inicio
-    const c4 = excelRow.getCell(5);
-    c4.value = fmtDateTimeDot(r.horaInicio);
-    applyStyle(c4, XLSX_STYLES.cell);
+      // Procesamiento de tipos
+      if (col.type === "date") {
+        if (val) {
+          const d = val instanceof Date ? val : new Date(val);
+          if (!isNaN(d.getTime())) {
+            cell.value = d;
+            cell.numFmt = col.numFmt || "dd/mm/yyyy hh:mm";
+          } else {
+            cell.value = "";
+          }
+        } else {
+          cell.value = "";
+        }
+      } else if (col.type === "number") {
+        const numVal = Number(val);
+        if (val !== null && val !== undefined && !isNaN(numVal)) {
+          cell.value = numVal;
+          if (col.numFmt) {
+            cell.numFmt = col.numFmt;
+          }
+        } else {
+          cell.value = val ?? "";
+        }
+      } else {
+        cell.value = val ?? "";
+      }
 
-    // 5) Hora de finalización
-    const c5 = excelRow.getCell(6);
-    c5.value = fmtDateTimeDot(r.fecha);
-    applyStyle(c5, XLSX_STYLES.cell);
-
-    // 6) Duración (texto literal)
-    const c6 = excelRow.getCell(7);
-    c6.value = fmtDurationLiteral(r.duracionSegundos);
-    applyStyle(c6, XLSX_STYLES.cell);
+      applyStyle(cell, {
+        ...cellStyle,
+        alignment,
+      });
+    });
   });
 
   // 6) Autofiltro sobre los encabezados
@@ -455,9 +463,58 @@ async function exportDetalladoXlsx(rows) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "deterquin-informe-detallado.xlsx";
+  link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+/**
+ * Genera y descarga el .xlsx de Informe Detallado usando la función genérica
+ */
+async function exportDetalladoXlsx(rows) {
+  const starts = rows.map((r) => new Date(r.horaInicio)).filter((d) => !Number.isNaN(d.getTime()));
+  const ends   = rows.map((r) => new Date(r.fecha))     .filter((d) => !Number.isNaN(d.getTime()));
+  const periodoTexto = (starts.length && ends.length)
+    ? `${fmtDateDot(new Date(Math.min(...starts.map((d) => d.getTime()))))} - ${fmtDateDot(new Date(Math.max(...ends.map((d) => d.getTime()))))}`
+    : "—";
+
+  const columns = [
+    { header: "Cliente", key: "client", width: 22 },
+    { header: "Dispositivo", key: "device", width: 22 },
+    { header: "Lavadora", key: "lavadora", width: 20 },
+    { header: "Origen del evento", key: "origenEvento", width: 26, highlightError: true },
+    { header: "Programa", key: "programaText", width: 26 },
+    { header: "Capacidad (kg)", key: "capacidadKg", width: 16, type: "number", numFmt: "0.00" },
+    { header: "Detergente (ml)", key: "detergenteMl", width: 18, type: "number", numFmt: "#,##0" },
+    { header: "Agua (L)", key: "aguaL", width: 14, type: "number", numFmt: "0.0" },
+    { header: "Precio ($)", key: "precio", width: 14, type: "number", numFmt: "$#,##0.00" },
+    { header: "Hora de inicio", key: "horaInicio", width: 22, type: "date", numFmt: "dd/mm/yyyy hh:mm" },
+    { header: "Hora de finalización", key: "fecha", width: 22, type: "date", numFmt: "dd/mm/yyyy hh:mm" },
+    { header: "Duración", key: "duracionText", width: 14 },
+  ];
+
+  const mappedRows = rows.map((r) => {
+    let programa = r.programaDescripcion;
+    if (!programa) {
+      const num = r.programaNumero ?? r.programaNum;
+      const name = r.programa || r.programaNombre || "";
+      programa = (num != null && name) ? `Programa ${num}: ${name}` : String(name || num || "");
+    }
+    return {
+      ...r,
+      client: r.instalacion || r.clienteNombre || r.client || "",
+      programaText: programa,
+      duracionText: fmtDurationLiteral(r.duracionSegundos),
+    };
+  });
+
+  await exportGenericXlsx({
+    titleText: `Periodo de informe: ${periodoTexto}`,
+    sheetName: "Informe de dosificación detallada",
+    filename: "deterquin-informe-detallado.xlsx",
+    columns,
+    rows: mappedRows,
+  });
 }
 
 function ReportsPage() {
@@ -577,55 +634,208 @@ function ReportsPage() {
     setIsExporting(true);
     try {
       const slug = currentType.slug;
+      const filenameSuffix = slug;
 
-      // ── DETALLADO: xlsx con layout de la imagen ──
       if (slug === "detallado") {
         if (filteredDetailed.length === 0) return;
         await exportDetalladoXlsx(filteredDetailed);
         return;
       }
 
-      // ── Resto de informes: CSV como antes ──
-      let header = [], body = [], filenameSuffix = slug;
       if (slug === "cantidad-total") {
-        header = ["Cliente", "Dispositivo", "Serial", "Estado", "Ubicacion", "Productos", "Cantidad restante L", "Consumo diario L"];
-        body = filteredSummary.map((r) => [
-          r.client, r.device, r.serial, r.status, `${r.country}, ${r.city}`,
-          r.products, csvNumber(r.productTotal), csvNumber(r.avgDailyConsumption),
-        ]);
+        if (filteredSummary.length === 0) return;
+        const columns = [
+          { header: "Cliente", key: "client", width: 22 },
+          { header: "Dispositivo", key: "device", width: 22 },
+          { header: "Serial", key: "serial", width: 18 },
+          { header: "Estado", key: "status", width: 14, highlightError: true },
+          { header: "Ubicación", key: "ubicacion", width: 24 },
+          { header: "Productos", key: "products", width: 14, type: "number", numFmt: "#,##0" },
+          { header: "Cantidad restante (L)", key: "productTotal", width: 22, type: "number", numFmt: "#,##0.00" },
+          { header: "Consumo diario (L)", key: "avgDailyConsumption", width: 20, type: "number", numFmt: "#,##0.00" },
+        ];
+        const mappedRows = filteredSummary.map((r) => ({
+          ...r,
+          ubicacion: `${r.country || "-"}, ${r.city || "-"}`,
+        }));
+        await exportGenericXlsx({
+          titleText: "Informe de Cantidad Total y Consumo",
+          sheetName: "Cantidad Total",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: mappedRows,
+        });
+
       } else if (slug === "ubicacion") {
-        header = ["Cliente", "Dispositivo", "Ciudad", "Pais", "Ubicacion"];
-        body = filteredUbicacion.map((r) => [r.client, r.device, r.ciudad, r.pais, r.ubicacion]);
+        if (filteredUbicacion.length === 0) return;
+        const columns = [
+          { header: "Cliente", key: "client", width: 22 },
+          { header: "Dispositivo", key: "device", width: 22 },
+          { header: "Ciudad", key: "ciudad", width: 18 },
+          { header: "País", key: "pais", width: 18 },
+          { header: "Ubicación", key: "ubicacion", width: 26 },
+        ];
+        await exportGenericXlsx({
+          titleText: "Informe de Ubicación de Dispositivos",
+          sheetName: "Ubicaciones",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: filteredUbicacion,
+        });
+
       } else if (slug === "sin-consumo") {
-        header = ["Cliente", "Producto", "Cantidad restante L"];
-        body = filteredSinConsumo.map((r) => [r.client, r.producto, csvNumber(r.cantidadRestante)]);
+        if (filteredSinConsumo.length === 0) return;
+        const columns = [
+          { header: "Cliente", key: "client", width: 22 },
+          { header: "Producto", key: "producto", width: 26 },
+          { header: "Cantidad restante (L)", key: "cantidadRestante", width: 22, type: "number", numFmt: "#,##0.00" },
+        ];
+        await exportGenericXlsx({
+          titleText: "Informe de Productos Sin Consumo Registrado",
+          sheetName: "Sin Consumo",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: filteredSinConsumo,
+        });
+
       } else if (slug === "errores-activos") {
-        header = ["Cliente", "Dispositivo", "Lavadora", "Bomba", "Producto", "Cantidad dosificada", "Cantidad objetivo"];
-        body = filteredErroresActivos.map((r) => [
-          r.client, r.device, r.lavadora, r.bomba, r.producto,
-          csvNumber(r.doneMl), csvNumber(r.totalMl),
-        ]);
+        if (filteredErroresActivos.length === 0) return;
+        const columns = [
+          { header: "Cliente", key: "client", width: 22 },
+          { header: "Dispositivo", key: "device", width: 22 },
+          { header: "Lavadora", key: "lavadora", width: 20 },
+          { header: "Bomba", key: "bomba", width: 16 },
+          { header: "Producto", key: "producto", width: 22 },
+          { header: "Cantidad dosificada (ml)", key: "doneMl", width: 24, type: "number", numFmt: "#,##0" },
+          { header: "Cantidad objetivo (ml)", key: "totalMl", width: 22, type: "number", numFmt: "#,##0" },
+        ];
+        await exportGenericXlsx({
+          titleText: "Informe de Errores Activos de Dosificación",
+          sheetName: "Errores Activos",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: filteredErroresActivos,
+        });
+
       } else if (slug === "consumo") {
-        header = ["Producto", "Consumo diario (L)"];
-        body = consumoAgg.map((r) => [r.label, csvNumber(r.value)]);
+        if (consumoAgg.length === 0) return;
+        const columns = [
+          { header: "Producto", key: "label", width: 26 },
+          { header: "Consumo diario (L)", key: "value", width: 22, type: "number", numFmt: "#,##0.00" },
+        ];
+        await exportGenericXlsx({
+          titleText: "Informe Consolidado de Consumo de Productos",
+          sheetName: "Consumo",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: consumoAgg,
+        });
+
       } else if (slug === "flujo-lavadora") {
-        const { header: h, body: b } = seriesToCSV(flujoLavadoraSeries);
-        header = h; body = b;
+        const series = flujoLavadoraSeries;
+        if (series.length === 0) return;
+        const { header, body } = seriesToCSV(series);
+        const columns = header.map((h, index) => ({
+          header: h,
+          key: `col_${index}`,
+          width: index === 0 ? 16 : 20,
+          type: index === 0 ? "string" : "number",
+          numFmt: index === 0 ? undefined : "#,##0",
+        }));
+        const mappedRows = body.map((rowArr) => {
+          const obj = {};
+          rowArr.forEach((val, idx) => {
+            obj[`col_${idx}`] = val;
+          });
+          return obj;
+        });
+        await exportGenericXlsx({
+          titleText: "Informe de Flujo Acumulado por Lavadora (ml)",
+          sheetName: "Flujo por Lavadora",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: mappedRows,
+        });
+
       } else if (slug === "flujo-bomba") {
-        const { header: h, body: b } = seriesToCSV(flujoBombaSeries);
-        header = h; body = b;
+        const series = flujoBombaSeries;
+        if (series.length === 0) return;
+        const { header, body } = seriesToCSV(series);
+        const columns = header.map((h, index) => ({
+          header: h,
+          key: `col_${index}`,
+          width: index === 0 ? 16 : 20,
+          type: index === 0 ? "string" : "number",
+          numFmt: index === 0 ? undefined : "#,##0",
+        }));
+        const mappedRows = body.map((rowArr) => {
+          const obj = {};
+          rowArr.forEach((val, idx) => {
+            obj[`col_${idx}`] = val;
+          });
+          return obj;
+        });
+        await exportGenericXlsx({
+          titleText: "Informe de Flujo Acumulado por Bomba (ml)",
+          sheetName: "Flujo por Bomba",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: mappedRows,
+        });
+
       } else if (slug === "seguimiento-errores") {
-        const { header: h, body: b } = seriesToCSV(seguimientoErroresSeries);
-        header = h; body = b;
+        const series = seguimientoErroresSeries;
+        if (series.length === 0) return;
+        const { header, body } = seriesToCSV(series);
+        const columns = header.map((h, index) => ({
+          header: h,
+          key: `col_${index}`,
+          width: index === 0 ? 16 : 20,
+          type: index === 0 ? "string" : "number",
+          numFmt: index === 0 ? undefined : "#,##0",
+        }));
+        const mappedRows = body.map((rowArr) => {
+          const obj = {};
+          rowArr.forEach((val, idx) => {
+            obj[`col_${idx}`] = val;
+          });
+          return obj;
+        });
+        await exportGenericXlsx({
+          titleText: "Informe de Seguimiento Histórico de Eventos con Error",
+          sheetName: "Seguimiento de Errores",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: mappedRows,
+        });
+
       } else if (slug === "histograma" && histogramData) {
-        header = ["Lavadora", "Inicio (min)", "Fin (min)", "Evento"];
-        body = histogramData.lavadoras.flatMap((lav) => lav.blocks.map((b) => [lav.nombre, b.startMin, b.endMin, b.label]));
+        const mappedRows = histogramData.lavadoras.flatMap((lav) =>
+          lav.blocks.map((b) => ({
+            lavadora: lav.nombre,
+            startMin: b.startMin,
+            endMin: b.endMin,
+            label: b.label,
+          }))
+        );
+        if (mappedRows.length === 0) return;
+        const columns = [
+          { header: "Lavadora", key: "lavadora", width: 22 },
+          { header: "Inicio (min)", key: "startMin", width: 18, type: "number", numFmt: "#,##0" },
+          { header: "Fin (min)", key: "endMin", width: 18, type: "number", numFmt: "#,##0" },
+          { header: "Evento", key: "label", width: 26 },
+        ];
+        await exportGenericXlsx({
+          titleText: "Informe de Histograma de Programas (Gantt)",
+          sheetName: "Histograma",
+          filename: `deterquin-informe-${filenameSuffix}.xlsx`,
+          columns,
+          rows: mappedRows,
+        });
       }
-      if (body.length === 0) return;
-      downloadCSV(header, body, `deterquin-informe-${filenameSuffix}.csv`);
     } catch (err) {
       console.error("[handleExport]", err);
-      setExportError("No se pudo generar el archivo. Revisa la consola para más detalle.");
+      setExportError("No se pudo generar el archivo Excel. Revisa la consola para más detalle.");
     } finally {
       setIsExporting(false);
     }
