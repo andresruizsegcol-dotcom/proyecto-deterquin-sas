@@ -12,7 +12,7 @@ import {
 } from "../../services/localMock";
 import {
   MdArrowBack, MdRefresh, MdDraw, MdMoreVert, MdClose, MdCheck,
-  MdLocationOn, MdApartment, MdSignalWifi4Bar, MdSignalWifiOff,
+  MdLocationOn, MdApartment, MdSignalCellularAlt, MdSignalWifiOff,
   MdExpandMore, MdExpandLess, MdTune, MdAdd, MdDelete,
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
@@ -423,7 +423,7 @@ function AjustesPage() {
             <div className="ap-info-label">Multi-system v1.4.7</div>
             <div className={`cd-device-status ${device.estado === "activo" ? "cd-status-on" : "cd-status-off"}`}>
               {device.estado === "activo"
-                ? <><MdSignalWifi4Bar size={11} /> Activo</>
+                ? <><MdSignalCellularAlt size={11} /> Activo</>
                 : <><MdSignalWifiOff size={11} /> Inactivo</>}
             </div>
           </div>

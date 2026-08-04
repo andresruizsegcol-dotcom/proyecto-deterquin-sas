@@ -14,6 +14,7 @@ import UbicacionPage from "../pages/reports/UbicacionPage";
 import ProgramasPage from "../pages/clients/ProgramasPage";
 import ProgramaDetallePage from "../pages/clients/ProgramaDetallePage";
 import PasoDetallePage from "../pages/clients/PasoDetallePage";
+import UsersPage from "../pages/users/UsersPage";
 import "./DashboardLayout.css";
 
 function DashboardLayout() {
@@ -68,6 +69,9 @@ function DashboardLayout() {
             <Route path="/informes" element={<ReportsPage />} />
             <Route path="/informes/ubicacion" element={<UbicacionPage />} />
             <Route path="/informes/:tipo" element={<ReportsPage />} />
+
+            {/* ── Módulo Administración ── */}
+            <Route path="/administracion/usuarios" element={<UsersPage />} />
           </Routes>
         </div>
       </div>

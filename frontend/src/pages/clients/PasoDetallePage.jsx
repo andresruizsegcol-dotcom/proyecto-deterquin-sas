@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   MdArrowBack, MdRefresh, MdCheck, MdClose, MdMoreVert,
   MdAdd, MdInfo, MdLocationOn, MdApartment,
-  MdSignalWifi4Bar, MdSignalWifiOff, MdDashboard, MdFlashOn,
+  MdSignalCellularAlt, MdSignalWifiOff, MdDashboard, MdFlashOn,
   MdDescription, MdDevices,
 } from "react-icons/md";
 import {
@@ -295,7 +295,7 @@ function PasoDetallePage() {
             <div className="pd-info-status">
               {device.estado === "activo" ? (
                 <>
-                  <MdSignalWifi4Bar size={12} color="#10b981" /> Activo
+                  <MdSignalCellularAlt size={12} color="#10b981" /> Activo
                 </>
               ) : (
                 <>

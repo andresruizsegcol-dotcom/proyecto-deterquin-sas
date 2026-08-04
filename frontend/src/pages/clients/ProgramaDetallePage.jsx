@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   MdArrowBack, MdRefresh, MdCheck, MdClose, MdMoreVert,
   MdAdd, MdInfo, MdLocationOn, MdApartment,
-  MdSignalWifi4Bar, MdSignalWifiOff, MdSettings, MdDelete,
+  MdSignalCellularAlt, MdSignalWifiOff, MdSettings, MdDelete,
 } from "react-icons/md";
 import {
   findDeviceById, getProgramsForDevice, saveProgramsForDevice,
@@ -325,7 +325,7 @@ function ProgramaDetallePage() {
             <div className="pd-info-status">
               {device.estado === "activo" ? (
                 <>
-                  <MdSignalWifi4Bar size={12} color="#10b981" /> Activo
+                  <MdSignalCellularAlt size={12} color="#10b981" /> Activo
                 </>
               ) : (
                 <>

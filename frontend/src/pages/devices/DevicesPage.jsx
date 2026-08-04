@@ -14,7 +14,7 @@ import {
   MdFilterList, MdMoreVert, MdRefresh, MdSearch, MdArrowBack, MdAdd,
   MdKeyboardArrowDown, MdKeyboardArrowUp, MdLocationOn, MdApartment,
   MdDraw, MdDashboard, MdDescription, MdFlashOn, MdDevices, MdPlaylistPlay,
-  MdDelete, MdSignalWifi4Bar, MdSignalWifiOff, MdClose, MdTune,
+  MdDelete, MdSignalCellularAlt, MdSignalWifiOff, MdClose, MdTune,
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
@@ -45,7 +45,7 @@ function DeviceCard({ dev, navigate, onDelete, onEdit, onOpenProgramas, onOpenCa
             <div className="dv-card-sublabel">Estado</div>
             <div className={`device-status-badge ${dev.estado === "activo" ? "status-on" : "status-off"}`}>
               {dev.estado === "activo"
-                ? <><MdSignalWifi4Bar size={12} /> Activo</>
+                ? <><MdSignalCellularAlt size={12} /> Activo</>
                 : <><MdSignalWifiOff size={12} /> Inactivo</>}
             </div>
             <div className="dv-notif-ok" style={{ marginTop: 4 }}>✓ Sin notificaciones</div>

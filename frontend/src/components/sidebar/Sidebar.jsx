@@ -6,8 +6,10 @@ import {
   MdDashboard, MdPeople, MdDevices,
   MdDescription, MdKeyboardArrowDown,
   MdArrowForward, MdArrowBack,
+  MdManageAccounts,
 } from "react-icons/md";
 import { REPORT_TYPES } from "../../constants/reportTypes";
+import { getRawItem } from "../../services/localMock";
 
 function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
   const navigate = useNavigate();
@@ -24,8 +26,13 @@ function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
     if (pathname === "/" || pathname.startsWith("/dashboard")) return "dashboard";
     if (pathname.startsWith("/clientes")) return "clientes";
     if (pathname.startsWith("/dispositivos")) return "dispositivos";
+    if (pathname.startsWith("/administracion/usuarios")) return "usuarios";
     return "dashboard";
   };
+
+  // Verificar si el usuario actual tiene permisos de administración
+  const userRole = getRawItem("userRole") || "";
+  const isAdmin = userRole === "admin" || userRole === "superadmin" || userRole === "administrador" || userRole === "superadministrador" || userRole === "support";
 
   const [activeItem, setActiveItem] = useState(() => getActiveFromPath(location.pathname));
 
@@ -161,6 +168,22 @@ function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
             </div>
           )}
         </div>
+
+        {/* ── Sección Administración (solo para admins) ── */}
+        {isAdmin && (
+          <>
+            {!collapsed && <div className="sidebar-section" style={{ marginTop: 10 }}>Administración</div>}
+
+            {/* Usuarios */}
+            <div
+              className={`sidebar-item ${activeItem === "usuarios" ? "active" : ""}`}
+              onClick={() => handleNavigation("/administracion/usuarios")}
+            >
+              <MdManageAccounts size={22} />
+              {!collapsed && <span>Usuarios</span>}
+            </div>
+          </>
+        )}
 
       </nav>
     </aside>

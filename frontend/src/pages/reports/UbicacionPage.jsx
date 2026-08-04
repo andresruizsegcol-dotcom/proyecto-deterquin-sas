@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import {
-  MdClose, MdRefresh, MdFilterList, MdSignalWifi4Bar, MdSignalWifiOff,
+  MdClose, MdRefresh, MdFilterList, MdSignalCellularAlt, MdSignalWifiOff,
   MdDevices, MdDashboard, MdDescription, MdMoreVert, MdCheck,
   MdLocationOn, MdBusiness, MdCalendarToday, MdRouter,
 } from "react-icons/md";
@@ -340,7 +340,7 @@ function DeviceModal({
               <span className="ubic-modal-serial">{device.serial || "—"}</span>
               <span className={`ubic-modal-status-badge ${isActivo ? "activo" : "inactivo"}`}>
                 {isActivo
-                  ? <><MdSignalWifi4Bar size={12} /> Activo</>
+                  ? <><MdSignalCellularAlt size={12} /> Activo</>
                   : <><MdSignalWifiOff  size={12} /> Inactivo</>}
               </span>
             </div>

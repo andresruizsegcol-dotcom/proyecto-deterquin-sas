@@ -8,7 +8,7 @@ import {
 } from "../../services/localMock";
 import {
   MdArrowBack, MdAdd, MdClose, MdDevices, MdLocationOn,
-  MdApartment, MdSignalWifi4Bar, MdSignalWifiOff, MdDraw, MdMoreVert,
+  MdApartment, MdSignalCellularAlt, MdSignalWifiOff, MdDraw, MdMoreVert,
   MdDescription, MdFilterList, MdRefresh, MdScience, MdNotes,
   MdDashboard, MdFlashOn, MdPlaylistPlay, MdDelete, MdSearch, MdTune,
 } from "react-icons/md";
@@ -348,7 +348,7 @@ function ClientsDetail() {
                     </div>
                     <div className="cd-device-row-mid">
                       <div className={`cd-device-status ${dev.estado === "activo" ? "cd-status-on" : "cd-status-off"}`}>
-                        {dev.estado === "activo" ? <><MdSignalWifi4Bar size={12} /> Activo</> : <><MdSignalWifiOff size={12} /> Inactivo</>}
+                        {dev.estado === "activo" ? <><MdSignalCellularAlt size={12} /> Activo</> : <><MdSignalWifiOff size={12} /> Inactivo</>}
                       </div>
                       <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>✓ Sin notificaciones</div>
                     </div>

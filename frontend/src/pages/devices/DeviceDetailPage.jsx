@@ -15,7 +15,7 @@ import {
 import {
   MdArrowBack, MdDraw, MdMoreVert, MdDelete, MdTune, MdPlaylistPlay,
   MdSensors, MdDashboard, MdFlashOn, MdDescription, MdLocationOn,
-  MdApartment, MdSignalWifi4Bar, MdSignalWifiOff,
+  MdApartment, MdSignalCellularAlt, MdSignalWifiOff,
 } from "react-icons/md";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import DeviceFormModal from "../../components/devices/DeviceFormModal";
@@ -121,7 +121,7 @@ function DeviceDetailPage() {
             <div className="ddp-info-label">Estado</div>
             <div className={`cd-device-status ${device.estado === "activo" ? "cd-status-on" : "cd-status-off"}`}>
               {device.estado === "activo"
-                ? <><MdSignalWifi4Bar size={12} /> Activo</>
+                ? <><MdSignalCellularAlt size={12} /> Activo</>
                 : <><MdSignalWifiOff size={12} /> Inactivo</>}
             </div>
           </div>
