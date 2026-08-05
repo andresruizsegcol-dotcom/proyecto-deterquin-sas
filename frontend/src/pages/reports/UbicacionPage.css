@@ -324,10 +324,30 @@
 .ubic-modal-quick-btn:hover svg { transform: scale(1.15); }
 
 /* Responsive */
+@media (max-width: 767px) {
+  .ubic-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .ubic-header-actions { width: 100%; }
+  .ubic-action-btn { width: 100%; justify-content: center; }
+  .ubic-filters-bar { padding: 8px 12px; gap: 6px; }
+}
+
 @media (max-width: 640px) {
   .ubic-modal-body { grid-template-columns: 1fr; }
   .ubic-modal-left,
-  .ubic-modal-center { border-right: none; border-bottom: 1px solid #f1f5f9; }
+  .ubic-modal-center { border-right: none; border-bottom: 1px solid #f1f5f9; padding: 12px 14px; }
   .ubic-modal-right { grid-template-columns: repeat(4, 1fr); }
-  .ubic-map-wrapper { min-height: 320px; height: 320px; }
+  .ubic-map-wrapper { min-height: 300px; height: calc(100vh - 280px); }
+  .ubic-map-toggle { left: 8px; top: 8px; }
+  .ubic-toggle-btn { padding: 5px 10px; font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .ubic-modal-right { grid-template-columns: repeat(2, 1fr); }
+  .ubic-modal-header { padding: 10px 14px; }
+  .ubic-modal-quick-btn { padding: 10px 8px; font-size: 10px; }
+}
+
+@media (max-width: 360px) {
+  .ubic-modal-left { padding: 10px; }
+  .ubic-modal-center { padding: 10px; }
 }

@@ -1,21 +1,54 @@
 /*
   index.css
   - Estilos globales y variables de layout principales.
-  - Añadimos variables CSS y breakpoints para soporte responsive (desktop / tablet / mobile).
+  - Sistema de tipografía responsive con clamp() para escala fluida.
+  - Variables CSS: colores, espaciados, breakpoints.
+  - Soporte completo para 320px → 1920px.
 */
 
+/* ── Variables globales ── */
 :root {
+  /* Colores */
   --color-bg: #F3F4F6;
   --color-sidebar: #08204A;
   --color-accent: #2563eb;
   --color-sidebar-active: #6abf3f;
   --color-header: rgb(214, 237, 237);
   --color-danger: #ef4444;
-  --sidebar-width: 260px;
-  --sidebar-collapsed: 90px;
-  --gap: 16px;
+
+  /* Dimensiones sidebar */
+  --sidebar-width: 230px;
+  --sidebar-collapsed: 56px;
+
+  /* Espaciado base responsive */
+  --gap: clamp(8px, 2vw, 16px);
+  --gap-sm: clamp(4px, 1vw, 8px);
+  --gap-lg: clamp(12px, 3vw, 24px);
+
+  /* Padding de página */
+  --page-padding: clamp(8px, 2vw, 20px);
+
+  /* Tipografía responsive — escala fluida */
+  --fs-xs:   clamp(10px, 1.8vw, 11px);
+  --fs-sm:   clamp(11px, 2vw, 12px);
+  --fs-base: clamp(12px, 2.2vw, 13px);
+  --fs-md:   clamp(13px, 2.4vw, 14px);
+  --fs-lg:   clamp(14px, 2.6vw, 15px);
+  --fs-xl:   clamp(15px, 3vw, 18px);
+  --fs-2xl:  clamp(17px, 3.5vw, 22px);
+  --fs-3xl:  clamp(20px, 4vw, 28px);
+
+  /* Alturas de controles */
+  --input-height: clamp(32px, 5vw, 38px);
+  --btn-height: clamp(30px, 4.5vw, 36px);
+
+  /* Radios */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
+/* ── Reset ── */
 * {
   margin: 0;
   padding: 0;
@@ -30,30 +63,52 @@
   box-sizing: content-box !important;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: var(--color-bg);
+/* ── Base ── */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* el scroll vive en .page-content, no en el body */
+  overflow-x: hidden;
 }
 
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: var(--fs-md);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Global media responsiveness ── */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Layout principal ── */
 .dashboard-layout {
   display: flex;
 }
 
+/* ── Sidebar base (global) ── */
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
-
   background-color: var(--color-sidebar);
-
   color: white;
-
   padding: 20px 15px;
-
   display: flex;
   flex-direction: column;
-
   overflow-y: auto;
-
   transition: 0.3s;
 }
 
@@ -65,14 +120,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 40px;
 }
 
 .sidebar-logo img {
   width: 120px;
   object-fit: contain;
-
   transition: 0.3s;
 }
 
@@ -83,34 +136,25 @@ body {
 .menu-button {
   background: transparent;
   border: none;
-
   color: white;
-
   cursor: pointer;
 }
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-
   gap: 6px;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-
   gap: 14px;
-
   padding: 14px 16px;
-
   border-radius: 10px;
-
   cursor: pointer;
-
   transition: 0.3s;
-
-  font-size: 18px;
+  font-size: var(--fs-lg);
 }
 
 .sidebar-item:hover {
@@ -126,56 +170,37 @@ body {
 }
 
 .sidebar-section {
-  font-size: 12px;
-
+  font-size: var(--fs-xs);
   color: rgba(255,255,255,0.7);
-
   margin-top: 20px;
   margin-bottom: 10px;
-
   padding-left: 10px;
-
   letter-spacing: 1px;
 }
+
+/* ── Área principal ── */
 .main-content {
   flex: 1;
 }
 
 .page-content {
-  padding: 20px;
-}
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* el scroll vive en .page-content, no en el body */
-}
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  padding: var(--page-padding);
 }
 
-/* Responsive breakpoints */
-
-/* Global image & media responsiveness */
-img, video, svg {
-  max-width: 100%;
-  height: auto;
+/* ── KPI Grids comunes ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
 }
 
-/* Prevent horizontal scroll globally */
-body {
-  overflow-x: hidden;
-}
+/* ── Responsive breakpoints ── */
 
-/* Laptop / Tablet (1024px) */
+/* Laptop / Tablet grande (1024px) */
 @media (max-width: 1024px) {
   :root {
     --sidebar-width: 200px;
-    --sidebar-collapsed: 80px;
+    --sidebar-collapsed: 56px;
   }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .page-content { padding: 14px; }
@@ -184,11 +209,16 @@ body {
 /* Tablet (768px) */
 @media (max-width: 767px) {
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .page-content { padding: 10px; }
+  .page-content { padding: 8px; }
 }
 
-/* Mobile large (480px) */
+/* Mobile grande (480px) */
 @media (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
-  .page-content { padding: 8px; }
+  .page-content { padding: 6px; }
+}
+
+/* Mobile pequeño (360px) */
+@media (max-width: 390px) {
+  .page-content { padding: 4px; }
 }

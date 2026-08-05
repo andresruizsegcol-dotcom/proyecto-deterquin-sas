@@ -1,3 +1,13 @@
+/*
+  Sidebar.css
+  - Desktop: drawer lateral fijo de 230px (colapsable a 56px).
+  - Mobile (≤767px): drawer off-canvas con transform, ocupa ~80% del ancho
+    (máx 280px). Se abre con clase .mobile-open.
+  - Animación suave con cubic-bezier.
+  - NO se modifica la lógica React de apertura/cierre.
+*/
+
+/* ── Base ── */
 .sidebar {
   width: 230px;
   min-width: 230px;
@@ -7,20 +17,29 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s, min-width 0.3s;
+  flex-shrink: 0;
+  transition: width 0.3s ease, min-width 0.3s ease;
   overflow: hidden;
+  overflow-y: auto;
 }
+
+/* Scrollbar delgado dentro del sidebar */
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
 
 /* ── Logo ── */
 .sidebar-logo {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-logo img {
   max-width: 110px;
-  height: 40px;
+  height: 38px;
   object-fit: contain;
+  transition: max-width 0.3s ease, height 0.3s ease;
 }
 
 /* ── Top ── */
@@ -28,21 +47,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2px 5px;  /* reduce el padding superior */
-  min-height: 40px;
-  margin-bottom: 8px;
+  padding: 10px 10px 6px;
+  min-height: 52px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
 }
 
 .menu-button {
   background: none;
   border: none;
   color: white;
-  cursor: hand;
+  cursor: pointer;
   padding: 4px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 6px);
   transition: background 0.2s;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .menu-button:hover {
@@ -51,41 +72,46 @@
 
 /* ── Sección "General" ── */
 .sidebar-section {
-  padding: 2px 15px 2px;  /* reduce espacio arriba */
-  font-size: 10px;
-  font-weight: bold;
-  color: #a0aec0;
+  padding: 2px 14px 4px;
+  font-size: var(--fs-xs, 10px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
   overflow: hidden;
   white-space: nowrap;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 /* ── Menú principal ── */
-
-
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 2px;
   margin-top: 0;
-  padding: 0px 8px;  /* quita el padding-top */
+  padding: 0 8px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+.sidebar-menu::-webkit-scrollbar { width: 2px; }
+.sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
 
 /* ── Items del menú ── */
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 7px 15px;
+  padding: 8px 12px;
   border-radius: 0;
   background: transparent;
   border: none;
   color: rgba(228, 228, 228, 0.9);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-base, 13px);
   text-align: left;
-  cursor: hand;
+  cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
   overflow: hidden;
@@ -103,7 +129,7 @@
 }
 
 .sidebar-item.open {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.07);
 }
 
 /* ── Submenú ── */
@@ -112,17 +138,12 @@
   padding: 2px 0;
 }
 
-/* Variante con scroll: el submenú de Informes puede tener muchos ítems
-   (un tipo de informe por entrada); en vez de empujar el resto del
-   sidebar fuera de la pantalla, se limita su alto y se permite scroll
-   interno. */
+/* Submenú scrolleable (para Informes con muchos ítems) */
 .submenu-scroll {
-  max-height: 280px;
+  max-height: 260px;
   overflow-y: auto;
 }
-.submenu-scroll::-webkit-scrollbar {
-  width: 3px;
-}
+.submenu-scroll::-webkit-scrollbar { width: 3px; }
 .submenu-scroll::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.25);
   border-radius: 2px;
@@ -131,27 +152,27 @@
 .submenu-item {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 7px 4px 5px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.85);
-  cursor: hand;
-  transition: background 0.10s ease;
+  gap: 6px;
+  padding: 6px 6px 5px 8px;
+  font-size: var(--fs-xs, 11px);
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+  transition: background 0.1s ease;
   white-space: nowrap;
   width: 100%;
   background: none;
-  border: navy;
+  border: none;
   text-align: left;
-  border-radius: 7px;
+  border-radius: 6px;
 }
 
 .submenu-item svg {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.65);
   flex-shrink: 0;
 }
 
 .submenu-item:hover {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.07);
 }
 
 .submenu-item.active {
@@ -161,13 +182,14 @@
 
 .submenu-arrow {
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .submenu-arrow.open {
   transform: rotate(180deg);
 }
 
-/* ── Colapsado ── */
+/* ── Colapsado (desktop) ── */
 .sidebar.collapsed {
   width: 56px;
   min-width: 56px;
@@ -176,7 +198,7 @@
 
 .sidebar.collapsed .sidebar-top {
   justify-content: center;
-  padding: 16px 0 12px;
+  padding: 14px 0 10px;
 }
 
 .sidebar.collapsed .sidebar-logo {
@@ -186,7 +208,8 @@
 }
 
 .sidebar.collapsed .sidebar-logo img {
-  max-width: 32px;
+  max-width: 30px;
+  height: 30px;
 }
 
 .sidebar.collapsed .sidebar-menu {
@@ -195,14 +218,16 @@
 
 .sidebar.collapsed .sidebar-item {
   justify-content: center;
-  padding: 14px 0;
+  padding: 12px 0;
   border-radius: 0;
+  gap: 0;
 }
 
 .sidebar.collapsed .sidebar-item svg {
   margin: 0;
 }
 
+/* ── MOBILE (≤767px) — Off-canvas drawer ── */
 @media (max-width: 767px) {
   .sidebar {
     position: fixed;
@@ -210,20 +235,47 @@
     left: 0;
     z-index: 2000;
     height: 100vh;
+    /* Abre como drawer: 82% del ancho, máx 280px (similar CM2W) */
+    width: min(82vw, 280px) !important;
+    min-width: min(82vw, 280px) !important;
     transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.25);
-    width: 250px;
-    min-width: 250px;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
+
   .sidebar.mobile-open {
     transform: translateX(0);
   }
-  /* Hide the toggle collapse button inside the drawer on mobile */
+
+  /* Ocultar botón colapsar dentro del drawer en mobile */
   .sidebar .menu-button {
     display: none;
   }
+
   .sidebar-logo {
-    margin: 0 auto;
+    margin: 0;
+  }
+
+  .sidebar-logo img {
+    max-width: 100px;
+    height: 36px;
+  }
+
+  .sidebar-top {
+    justify-content: flex-start;
+    padding: 12px 14px 8px;
+  }
+
+  /* Items más altos para mejor área táctil */
+  .sidebar-item {
+    padding: 10px 14px;
+    font-size: var(--fs-md, 13px);
+  }
+
+  .submenu-item {
+    padding: 8px 8px 7px 12px;
+    font-size: var(--fs-sm, 11.5px);
   }
 }

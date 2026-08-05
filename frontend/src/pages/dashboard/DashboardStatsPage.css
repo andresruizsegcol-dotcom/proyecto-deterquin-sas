@@ -1,49 +1,62 @@
+/*
+  DashboardStatsPage.css
+  - Estilos para el dashboard de estadísticas de dispositivo.
+  - Filtros, widgets y tablas responsivos.
+*/
+
 .dashboard-device-page {
-  padding: 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 14px);
 }
 
 .dashboard-device-header {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: rgb(0, 0, 0);
+  gap: 10px;
+  color: #111;
   cursor: pointer;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .dashboard-device-header h2 {
-  font-size: 24px;
+  font-size: var(--fs-xl, 18px);
   margin: 0;
+  font-weight: 600;
 }
 
+/* ── Filtros ── */
 .dashboard-device-filters {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 21px;
+  gap: var(--gap, 12px);
+  margin-bottom: 8px;
 }
 
 .device-select-wrapper {
   position: relative;
-  min-width: 240px;
+  min-width: 200px;
+  flex: 1;
+  max-width: 320px;
 }
 
 .device-select-button {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
-  max-width: 320px;
-  padding: 12px 16px;
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  border-radius: 14px;
-  background: rgba(226, 235, 235, 0.06);
-  color: rgb(13, 12, 12);
+  padding: clamp(8px, 1.8vw, 12px) clamp(10px, 2vw, 16px);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: rgba(226, 235, 235, 0.08);
+  color: #111;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--fs-md, 13px);
   transition: background 0.2s ease, border-color 0.2s ease;
+  font-family: inherit;
 }
 
 .device-select-button:hover {
@@ -56,124 +69,106 @@
 
 .device-dropdown {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 8px);
   left: 0;
   width: 100%;
   max-width: 320px;
   background: rgba(234, 234, 234, 0.98);
   border: 1px solid rgba(8, 7, 7, 0.12);
-  border-radius: 16px;
-  box-shadow: 0 16px 40px rgba(187, 177, 177, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(187, 177, 177, 0.25);
   overflow: hidden;
-  z-index: 10;
+  z-index: 50;
 }
 
 .device-dropdown-item {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 14px;
   background: transparent;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
-  color: rgb(249, 246, 246);
+  gap: 3px;
+  color: rgb(30, 30, 30);
   text-align: left;
   cursor: pointer;
+  font-family: inherit;
+  transition: background 0.1s;
 }
 
 .device-dropdown-item:hover {
-  background: rgba(224, 221, 221, 0.08);
+  background: rgba(200, 200, 200, 0.25);
 }
 
 .device-dropdown-item strong {
-  font-size: 14px;
+  font-size: var(--fs-md, 13px);
 }
 
 .device-dropdown-item div {
-  color: #090909;
-  font-size: 11px;
+  color: #555;
+  font-size: var(--fs-xs, 11px);
 }
 
 .device-dropdown-empty {
-  padding: 14px 16px;
-  color: #000000;
+  padding: 12px 14px;
+  color: #555;
+  font-size: var(--fs-base, 12px);
 }
 
 .selected-device-box {
   flex: 1;
-  min-width: 220px;
-  max-width: 360px;
-  padding: 12px 16px;
-  border-radius: 14px;
+  min-width: 200px;
+  max-width: 340px;
+  padding: clamp(8px, 1.5vw, 12px) clamp(10px, 2vw, 16px);
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #0e0e0e;
+  color: #111;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .selected-device-box span {
-  color: rgb(14, 11, 11);
+  color: #111;
   font-weight: 600;
+  font-size: var(--fs-md, 13px);
 }
 
 .selected-device-box small {
   color: #94a3b8;
-  font-size: 13px;
+  font-size: var(--fs-sm, 12px);
 }
 
 .dashboard-device-empty {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
-  padding: 32px;
-  color: #030405;
+  border-radius: 16px;
+  padding: clamp(20px, 4vw, 32px);
+  color: #111;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 220px;
+  gap: 10px;
+  min-height: 160px;
 }
 
 .dashboard-device-empty p {
-  color: rgb(0, 0, 0);
-  font-size: 18px;
+  color: #111;
+  font-size: var(--fs-xl, 16px);
   margin: 0;
 }
 
 .dashboard-device-empty span {
   color: #94a3b8;
-  font-size: 14px;
+  font-size: var(--fs-md, 13px);
 }
 
-@media (max-width: 900px) {
-  .dashboard-device-page { padding: 18px; }
-  .dashboard-device-header h2 { font-size: 22px; }
-  .dsp-widget-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 767px) {
-  .dashboard-device-page { padding: 12px; }
-  .dashboard-device-filters { flex-direction: column; align-items: stretch; gap: 10px; }
-  .device-select-wrapper { min-width: unset; width: 100%; }
-  .device-select-button { max-width: 100%; }
-  .selected-device-box { max-width: 100%; }
-  .dsp-widget-grid { gap: 12px; }
-}
-
-@media (max-width: 480px) {
-  .dashboard-device-page { padding: 8px; }
-  .dashboard-device-header { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .dashboard-device-header h2 { font-size: 18px; }
-  .dsp-table th:nth-child(n+4),
-  .dsp-table td:nth-child(n+4) { display: none; }
-}
-
+/* ── Widget Grid ── */
 .dsp-widget-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: var(--gap, 14px);
 }
 
 .dsp-widget-full {
@@ -182,7 +177,7 @@
 
 .dsp-widget {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   overflow: hidden;
 }
@@ -191,9 +186,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
+  padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
   border-bottom: 1px solid #f1f5f9;
-  font-size: 13px;
+  font-size: var(--fs-base, 12px);
   font-weight: 700;
   color: #1e293b;
 }
@@ -203,43 +198,43 @@
   cursor: pointer;
   transition: color 0.15s;
 }
-.dsp-refresh-icon:hover {
-  color: #2563eb;
-}
+.dsp-refresh-icon:hover { color: var(--color-accent, #2563eb); }
 
 .dsp-widget-body {
-  padding: 16px 18px;
+  padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 18px);
 }
 
 .dsp-empty-text {
-  font-size: 12.5px;
+  font-size: var(--fs-sm, 11.5px);
   color: #94a3b8;
   margin: 0;
 }
 
+/* ── Tabla ── */
 .dsp-table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dsp-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: var(--fs-sm, 11.5px);
 }
 
 .dsp-table th {
   text-align: left;
-  font-size: 10.5px;
+  font-size: var(--fs-xs, 10px);
   color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  padding: 6px 8px;
+  padding: 5px 8px;
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
 }
 
 .dsp-table td {
-  padding: 8px;
+  padding: 7px 8px;
   border-bottom: 1px solid #f1f5f9;
   color: #334155;
   white-space: nowrap;
@@ -247,7 +242,7 @@
 
 .dsp-table-strong {
   font-weight: 700;
-  color: #2563eb;
+  color: var(--color-accent, #2563eb);
 }
 
 .dsp-table-muted {
@@ -255,8 +250,25 @@
   font-style: italic;
 }
 
+/* ── Responsive ── */
 @media (max-width: 900px) {
-  .dsp-widget-grid {
-    grid-template-columns: 1fr;
-  }
+  .dashboard-device-page { gap: 12px; }
+  .dashboard-device-header h2 { font-size: 18px; }
+  .dsp-widget-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  .dashboard-device-page { gap: 10px; }
+  .dashboard-device-filters { flex-direction: column; align-items: stretch; gap: 8px; }
+  .device-select-wrapper { min-width: unset; width: 100%; max-width: 100%; }
+  .device-select-button { max-width: 100%; }
+  .selected-device-box { max-width: 100%; }
+  .dsp-widget-grid { gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .dashboard-device-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .dashboard-device-header h2 { font-size: 16px; }
+  .dsp-table th:nth-child(n+4),
+  .dsp-table td:nth-child(n+4) { display: none; }
 }

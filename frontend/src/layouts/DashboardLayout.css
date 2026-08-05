@@ -4,6 +4,7 @@
     el 100% de la pantalla sin desbordarse.
   - El scroll vive ÚNICAMENTE en .page-content (el área de contenido),
     nunca en el body ni en el sidebar.
+  - Mobile: sidebar como drawer off-canvas con overlay.
 */
 
 .dashboard-layout {
@@ -26,8 +27,8 @@
 }
 
 .dashboard-layout > aside.collapsed {
-  width: 75px;
-  min-width: 75px;
+  width: 56px;
+  min-width: 56px;
 }
 
 /* Columna derecha (header + contenido) */
@@ -45,18 +46,18 @@
   flex: 1;
   overflow-y: auto;     /* ← scroll principal de todas las páginas */
   overflow-x: hidden;
-  padding: 10px;
+  padding: var(--page-padding, 10px);
   background: #f0f4f8;
 }
 
-/* Sidebar Overlay for Mobile */
+/* ── Sidebar Overlay para Mobile ── */
 .sidebar-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   z-index: 1500;
   animation: overlayFadeIn 0.2s ease-out;
@@ -64,14 +65,40 @@
 
 @keyframes overlayFadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
+/* ── Tablet (1024px) ── */
+@media (max-width: 1024px) {
+  .dashboard-layout > aside:not(.collapsed) {
+    width: 200px;
+    min-width: 200px;
+  }
+}
+
+/* ── Mobile (767px) — sidebar off-canvas ── */
 @media (max-width: 767px) {
   .dashboard-layout > aside:not(.collapsed),
   .dashboard-layout > aside.collapsed {
     width: 0;
     min-width: 0;
     overflow: hidden;
+    /* El sidebar real ocupa toda su anchura en posición fixed via Sidebar.css */
+  }
+
+  .page-content {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 390px) {
+  .page-content {
+    padding: 4px;
   }
 }

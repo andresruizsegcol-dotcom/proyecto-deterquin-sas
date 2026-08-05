@@ -83,7 +83,7 @@
 .cd-section {
   background: #fff;
   border-radius: 14px;
-  padding: 22px;
+  padding: clamp(14px, 2.5vw, 22px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
@@ -106,8 +106,8 @@
 /* ── Info Grid ── */
 .cd-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 30vw, 200px), 1fr));
+  gap: clamp(8px, 2vw, 16px);
 }
 
 .cd-info-item {
@@ -238,7 +238,7 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .cd-body {
-    padding: 10px;
+    padding: 8px;
   }
   .cd-client-info-card {
     flex-direction: column;
@@ -247,14 +247,44 @@
 }
 
 @media (max-width: 767px) {
+  /* 
+   * Fix: Android Chrome native <select> dropdown renders at wrong position
+   * when any ancestor has overflow != visible or CSS transform applied.
+   * Solution: on mobile, move all overflow/scroll to the OVERLAY only.
+   * The modal itself becomes height-auto with no overflow or max-height.
+   */
+  .cd-modal-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 12px 40px;
+  }
+  .cd-modal {
+    animation: cdFadeInMobile 0.15s ease-out !important;
+    transform: none !important;
+    /* Remove max-height so overflow:hidden doesn't clip the dropdown */
+    max-height: none !important;
+    /* Remove the flex + overflow chain that Android select hates */
+    overflow: visible !important;
+    width: calc(100% - 0px);
+    margin: auto;
+  }
+  .cd-modal-body {
+    /* Let the modal grow naturally — no overflow clipping */
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    flex: none;
+    min-height: unset;
+    padding: 14px 16px;
+  }
   .cd-header {
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px;
+    gap: 6px;
+    padding: 6px 8px;
   }
   .cd-header-title {
     width: 100%;
-    font-size: 13px;
+    font-size: 12px;
   }
   .cd-client-info-left {
     border-right: none;
@@ -265,20 +295,44 @@
     border-right: none;
   }
   .cd-section {
-    padding: 14px;
+    padding: 12px 14px;
   }
   .cd-stats-row {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
+  .cd-section-label {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  .cd-devices-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .cd-body { padding: 6px; gap: 12px; }
+}
+
+@keyframes cdFadeInMobile {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 480px) {
   .cd-stats-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
   .cd-devices-grid {
     grid-template-columns: 1fr;
   }
+  .cd-section { padding: 10px 12px; }
+  .cd-info-grid { gap: 8px; }
+  .cd-device-card { padding: 12px; }
+}
+
+@media (max-width: 360px) {
+  .cd-section { padding: 8px 10px; }
+  .cd-devices-grid { grid-template-columns: 1fr; }
+  .cd-stats-row { grid-template-columns: 1fr; gap: 8px; }
 }
 
 .cd-device-card:hover {
@@ -493,6 +547,7 @@
   overflow-y: auto;
   flex: 1 1 auto;
   min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .cd-modal-body label {
@@ -747,7 +802,7 @@
 }
 
 /* ── Botones de acceso rápido en la tarjeta del cliente ──
-   Layout CM2W: cuadrícula 2×2
+   Layout: cuadrícula 2×2
      [   Dispositivos (count badge)   ]  ← fila 1, full-width
      [ Productos ]  [ Informes ]         ← fila 2, dos columnas
    Cada botón: icono arriba + etiqueta abajo, compacto sin borde. */

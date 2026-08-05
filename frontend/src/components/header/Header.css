@@ -1,34 +1,55 @@
+/*
+  Header.css
+  - Estilos para la cabecera de la app (acciones, usuario, notificaciones).
+  - Altura compacta en mobile: 44px.
+  - Clases clave: `.header-item`, `.header-icon`, `.dropdown`.
+  - Nota: los dropdowns usan posicionamiento absoluto; asegurar `z-index` apropiado.
+*/
+
 .header {
-  /*
-    Header.css
-    - Estilos para la cabecera de la app (acciones, usuario, notificaciones).
-    - Clases clave: `.header-item`, `.header-icon`, `.dropdown`.
-    - Nota: los dropdowns usan posicionamiento absoluto; asegurar `z-index` apropiado.
-  */
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0 23px;
-  height: 45px;
+  justify-content: space-between;
+  padding: 0 clamp(8px, 2vw, 20px);
+  height: clamp(44px, 7vw, 52px);
   background-color: var(--color-header);
   border-bottom: 1px solid #e2e8f0;
-  border-radius: 0 0 0 0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 2.5vw, 20px);
 }
 
-/* Responsive: header actions wrap on small screens */
-@media (max-width: 640px) {
-  .header-right { gap: 10px; flex-wrap: wrap; }
-  .header-username { display: none; }
-  .header-icon { font-size: 20px; }
-  .dropdown { right: 8px; }
+/* ── Botón hamburguesa (mobile) ── */
+.header-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #111;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm, 4px);
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 0; /* evita espacio extra bajo el SVG */
 }
 
+.header-menu-toggle:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ── Ítems generales ── */
 .header-item {
   display: flex;
   align-items: center;
@@ -38,81 +59,84 @@
 }
 
 .header-icon {
-  font-size: 24px;
-  color: #0d0c0c;
+  font-size: clamp(18px, 3vw, 22px);
+  color: #111;
+  display: flex;
+  align-items: center;
 }
 
 .header-arrow {
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
   color: #444;
 }
 
 .header-username {
-  font-size: 14px;
+  font-size: clamp(12px, 2vw, 14px);
   color: #444;
   font-weight: 500;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* ── Logo (cuando existe) ── */
+.header-logo {
+  max-width: clamp(70px, 12vw, 100px);
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── Dropdown ── */
 .dropdown {
   position: absolute;
-  top: 36px;
+  top: clamp(34px, 5vw, 42px);
   right: 0;
   background: white;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: var(--radius-md, 6px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   min-width: 160px;
-  z-index: 100;
-  padding: 8px 0;
+  z-index: 1000;
+  padding: 6px 0;
 }
 
 .dropdown p {
-  padding: 10px 16px;
+  padding: 8px 14px;
   margin: 0;
-  font-size: 14px;
+  font-size: clamp(12px, 2vw, 14px);
   color: #333;
-  cursor: hand;
+  cursor: pointer;
 }
 
 .dropdown p:hover {
   background-color: #f5f5f5;
 }
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
-.header-left {
-  display: flex;
-  align-items: center;
-  padding-left: 12px;
-}
-
-.header-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: #000;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 4px;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-menu-toggle:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
+/* ── Responsive ── */
 @media (max-width: 767px) {
   .header-menu-toggle {
     display: inline-flex;
   }
+
+  .header-username {
+    display: none;
+  }
+
+  .header-right {
+    gap: 8px;
+  }
+
+  .dropdown {
+    right: 4px;
+  }
 }
 
-.header-logo {
-  max-width: 100px;
-  height: auto;
-  object-fit: contain;
+@media (max-width: 480px) {
+  .header-icon {
+    font-size: 18px;
+  }
+  .header-arrow {
+    display: none;
+  }
 }

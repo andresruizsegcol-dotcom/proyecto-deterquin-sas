@@ -1,126 +1,145 @@
 /*
-	ui.css
-	- Estilos para los componentes reutilizables en components/ui
-	  (Button, Card, Input, Loader).
-	- Ninguna página los usa todavía; quedan listos para adoptarse a medida
-	  que se vayan migrando los estilos "sueltos" de cada página hacia aquí.
-	- Paleta alineada con el resto de la app: azul #2563eb como acento
-	  principal, rojo #ef4444 para acciones destructivas.
+  ui.css
+  - Estilos para los componentes reutilizables en components/ui
+    (Button, Card, Input, Loader).
+  - Paleta alineada con el resto de la app.
+  - Heights y padding responsivos con clamp().
 */
 
+/* ── Botones ── */
 .ui-btn {
-	font-size: 14px;
-	font-weight: 600;
-	padding: 10px 18px;
-	border-radius: 8px;
-	border: none;
-	cursor: pointer;
-	transition: 0.2s;
+  font-size: var(--fs-base, 13px);
+  font-weight: 600;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2.5vw, 18px);
+  border-radius: var(--radius-md, 8px);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, opacity 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  min-height: var(--btn-height, 34px);
 }
 
 .ui-btn:disabled {
-	cursor: not-allowed;
-	opacity: 0.6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.ui-btn:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .ui-btn-primary {
-	background-color: #2563eb;
-	color: #fff;
+  background-color: var(--color-accent, #2563eb);
+  color: #fff;
 }
 .ui-btn-primary:hover:not(:disabled) {
-	background-color: #1d4ed8;
+  background-color: #1d4ed8;
 }
 
 .ui-btn-secondary {
-	background-color: #fff;
-	color: #334155;
-	border: 1px solid #cbd5e1;
+  background-color: #fff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
 }
 .ui-btn-secondary:hover:not(:disabled) {
-	background-color: #f1f5f9;
+  background-color: #f1f5f9;
 }
 
 .ui-btn-danger {
-	background-color: #ef4444;
-	color: #fff;
+  background-color: var(--color-danger, #ef4444);
+  color: #fff;
 }
 .ui-btn-danger:hover:not(:disabled) {
-	background-color: #dc2626;
+  background-color: #dc2626;
 }
 
+/* ── Card ── */
 .ui-card {
-	background-color: #fff;
-	border-radius: 12px;
-	padding: 20px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  border-radius: var(--radius-lg, 12px);
+  padding: clamp(12px, 2.5vw, 20px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Input Group ── */
 .ui-input-group {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-	margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: clamp(8px, 1.5vw, 12px);
 }
 
 .ui-input-label {
-	font-size: 13px;
-	font-weight: 500;
-	color: #334155;
+  font-size: var(--fs-sm, 12px);
+  font-weight: 600;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .ui-input {
-	padding: 10px 12px;
-	border-radius: 8px;
-	border: 1px solid #cbd5e1;
-	font-size: 14px;
-	outline: none;
+  padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
+  border-radius: var(--radius-md, 8px);
+  border: 1.5px solid #d1d5db;
+  font-size: var(--fs-md, 13px);
+  outline: none;
+  width: 100%;
+  height: var(--input-height, 36px);
+  transition: border-color 0.18s, box-shadow 0.18s;
+  font-family: inherit;
 }
 .ui-input:focus {
-	border-color: #2563eb;
+  border-color: var(--color-accent, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .ui-input-error {
-	border-color: #ef4444;
+  border-color: var(--color-danger, #ef4444);
 }
 
 .ui-input-error-text {
-	font-size: 12px;
-	color: #ef4444;
+  font-size: var(--fs-xs, 11px);
+  color: var(--color-danger, #ef4444);
 }
 
+/* ── Loader ── */
 .ui-loader {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	color: #64748b;
-	font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: var(--fs-sm, 13px);
 }
 
 .ui-loader-spinner {
-	width: 16px;
-	height: 16px;
-	border: 2px solid #e2e8f0;
-	border-top-color: #2563eb;
-	border-radius: 50%;
-	animation: ui-spin 0.7s linear infinite;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e2e8f0;
+  border-top-color: var(--color-accent, #2563eb);
+  border-radius: 50%;
+  animation: ui-spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes ui-spin {
-	to {
-		transform: rotate(360deg);
-	}
+  to { transform: rotate(360deg); }
 }
 
 .ui-loader-label {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
+/* ── Responsive ── */
 @media (max-width: 480px) {
-	.ui-btn {
-		width: 100%;
-		text-align: center;
-	}
-	.ui-input {
-		width: 100%;
-	}
+  .ui-btn {
+    font-size: var(--fs-sm, 12px);
+    padding: 6px 12px;
+  }
+  .ui-input {
+    height: 34px;
+  }
 }

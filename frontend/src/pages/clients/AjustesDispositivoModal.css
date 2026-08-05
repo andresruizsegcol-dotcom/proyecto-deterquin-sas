@@ -7,11 +7,15 @@
 */
 
 .ajustes-tabs {
-  padding: 0 22px;
+  padding: 0 clamp(10px, 2.5vw, 22px);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ajustes-modal-body {
-  max-height: 60vh;
+  max-height: clamp(50vh, 65vw, 65vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* Generales */
@@ -153,7 +157,7 @@
 
 @media (max-width: 767px) {
   .ajustes-tabs {
-    padding: 0 10px;
+    padding: 0 8px;
   }
   .ajustes-row {
     flex-direction: column;
@@ -174,4 +178,14 @@
   .ajustes-bombas-table td:nth-child(n+4) {
     display: none;
   }
+  .ajustes-modal-body {
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .ajustes-readonly-row { font-size: 12px; }
+  .ajustes-readonly-row { padding: 7px 0; }
+  .ajustes-bombas-table th:nth-child(n+3),
+  .ajustes-bombas-table td:nth-child(n+3) { display: none; }
 }

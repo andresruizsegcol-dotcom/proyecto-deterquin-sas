@@ -11,16 +11,16 @@
 .calib-modal-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  height: 95%;
-  width: 920px;
-
+  gap: 8px;
+  width: 100%;
+  max-width: 920px;
+  box-sizing: border-box;
 }
 
 .calib-card {
   border: 1px solid #94b4de;
-  border-radius: 5px;
-  overflow: scroll;
+  border-radius: 8px;
+  background: white;
   transition: opacity 0.15s;
 }
 
@@ -196,3 +196,39 @@
   margin: 0;
   padding: 9px 0;
 }
+
+@media (max-width: 767px) {
+  .calib-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .calib-card-content {
+    padding: 8px;
+  }
+  .calib-inline-add {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .calib-inline-add input,
+  .calib-inline-add select,
+  .calib-inline-add button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .calib-card-header {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+  .calib-btn-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .calib-btn-parar {
+    width: 100%;
+    text-align: center;
+  }
+}
+

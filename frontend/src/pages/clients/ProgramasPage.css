@@ -801,7 +801,7 @@
   }
   .pd-columns {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   .pd-col-left, .pd-col-right {
     width: 100% !important;
@@ -810,6 +810,18 @@
   .prog-grid-2 {
     grid-template-columns: 1fr;
   }
+  /* Tablas programas y pasos — scroll horizontal */
+  .prog-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .prog-table { font-size: 11px; }
+  .prog-table th, .prog-table td { padding: 7px 8px; }
+  /* Info card de programa */
+  .pd-info-card { flex-wrap: wrap; gap: 10px; padding: 10px 12px; }
+  .pd-info-left { min-width: unset; flex: 1 1 100%; }
+  .pd-settings-grid { gap: 14px; margin-bottom: 14px; }
+  .pd-dosing-row { gap: 8px; margin-bottom: 14px; }
+  .pd-dosing-item { min-width: unset; padding: 8px 10px; }
+  /* Señal 1 */
+  .prog-senal1-fields { grid-template-columns: 1fr; gap: 8px; }
 }
 
 @media (max-width: 480px) {
@@ -827,5 +839,13 @@
     align-items: flex-start;
     gap: 8px;
   }
+  .signal-badges { max-width: 100%; }
+  .prog-table th:nth-child(n+5),
+  .prog-table td:nth-child(n+5) { display: none; }
 }
 
+@media (max-width: 360px) {
+  .prog-table th:nth-child(n+4),
+  .prog-table td:nth-child(n+4) { display: none; }
+  .pd-info-card { padding: 8px 10px; }
+}
